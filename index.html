@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RUDRAKSHA ENTERPRISES DASHBOARD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet"><style id="appCss">:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#ECEFF1; --surface:#FFFFFF; --ink:#15232B; --muted:#586873; --line:#D4DBE0; --line-soft:#E6EBEE;
+  --primary:#0E5A4B; --primary-ink:#FFFFFF; --primary-soft:#DDEEE8;
+  --accent:#F0B323; --hover:#F3F6F7;
+  --c1:#0E7A63; --c2:#2C6DB4; --c3:#C98500; --c4:#7C5BA8; --c5:#C4533A;
+  --paid:#0E7A4B; --paid-bg:#DCF1E6; --recv:#8A5A00; --recv-bg:#FBEBC6; --unl:#3F4E58; --unl-bg:#E3E8EB;
+  --shadow:0 1px 0 rgba(21,35,43,.04), 0 6px 20px -12px rgba(21,35,43,.25);
+  --font:'Barlow',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --display:'Barlow Condensed','Arial Narrow','Roboto Condensed',Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1418; --surface:#152128; --ink:#E5EDF1; --muted:#95A7B1; --line:#2A3B45; --line-soft:#1F2F38;
+    --primary:#0B4A3E; --primary-soft:#173A33; --hover:#1B2A32;
+    --c1:#3CBE9D; --c2:#6AA5E6; --c3:#F0B323; --c4:#B394DE; --c5:#EE8468;
+    --paid:#5FD3A0; --paid-bg:#173A2D; --recv:#F2C65C; --recv-bg:#3A2F12; --unl:#B6C4CC; --unl-bg:#25353E;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 6px 20px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1418; --surface:#152128; --ink:#E5EDF1; --muted:#95A7B1; --line:#2A3B45; --line-soft:#1F2F38;
+  --primary:#0B4A3E; --primary-soft:#173A33; --hover:#1B2A32;
+  --c1:#3CBE9D; --c2:#6AA5E6; --c3:#F0B323; --c4:#B394DE; --c5:#EE8468;
+  --paid:#5FD3A0; --paid-bg:#173A2D; --recv:#F2C65C; --recv-bg:#3A2F12; --unl:#B6C4CC; --unl-bg:#25353E;
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 6px 20px -12px rgba(0,0,0,.6);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 120px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.num,.mono{font-variant-numeric:tabular-nums}
+
+/* Masthead */
+.masthead{background:var(--primary);color:#fff;padding:22px clamp(16px,4vw,40px) 26px;position:relative}
+.masthead::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;
+  background:repeating-linear-gradient(90deg,var(--accent) 0 34px,transparent 34px 56px)}
+.masthead .row{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;max-width:1360px;margin:0 auto}
+.masthead h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,5vw,50px);line-height:1;margin:0;letter-spacing:.005em}
+.masthead p{margin:6px 0 0;opacity:.85;font-size:15px}
+.theme-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:999px;padding:6px 14px;font-size:14px}
+.theme-btn:hover{background:rgba(255,255,255,.2)}
+
+/* Actions + notice */
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.theme-btn[hidden]{display:none}
+.notice{margin:0 0 12px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:14.5px;display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+.notice[hidden]{display:none}
+.notice.ok{border-color:var(--paid);background:var(--paid-bg)}
+.notice.warn{border-color:var(--accent);background:var(--recv-bg)}
+.notice.err{border-color:var(--c5);background:color-mix(in srgb,var(--c5) 14%,var(--surface))}
+.nbtns{display:flex;gap:10px;align-items:center;flex-shrink:0}
+.notice #noticeX{border:0;background:transparent;font-size:20px;line-height:1;padding:0 4px;color:var(--muted)}
+.notice .btn{align-self:auto}
+.notice .btn:disabled{opacity:.6;cursor:default}
+.drop{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(14,90,75,.88);color:#fff;font-family:var(--display);font-size:36px;font-weight:600;text-align:center;padding:20px}
+.drop[hidden]{display:none}
+
+/* Toolbar */
+.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+.toolbar .in{max-width:1360px;margin:0 auto;padding:12px clamp(16px,4vw,40px);display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center}
+.search{flex:1 1 320px;min-width:220px;position:relative}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted);pointer-events:none}
+.search input{width:100%;height:44px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);padding:0 76px 0 38px;font-size:16px}
+.search input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 45%,transparent)}
+.search .hint{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--muted)}
+.field{display:flex;flex-direction:column;gap:2px;font-size:12.5px;color:var(--muted)}
+.field select,.field input{height:34px;border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:0 8px;font-size:14px;color:var(--ink);max-width:190px}
+.field input[type=date]{max-width:150px}
+.btn{height:34px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:0 14px;font-size:14px;align-self:flex-end}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn[hidden]{display:none}
+
+main{max-width:1360px;margin:0 auto;padding:18px clamp(16px,4vw,40px) 48px}
+.insight{margin:0 0 14px;font-size:16px;color:var(--ink);max-width:90ch}
+.insight b{font-weight:600}
+
+/* KPI band */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.kpi{padding:14px 18px 14px;border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);margin:0 -1px -1px 0}
+.kpi .l{font-size:13.5px;color:var(--muted)}
+.kpi .v{font-family:var(--display);font-weight:600;font-size:38px;line-height:1.05;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:18px;font-weight:500;color:var(--muted);margin-left:3px}
+.kpi .s{font-size:13px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Cards */
+.grid{display:grid;gap:14px;margin-top:14px}
+.g-a{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
+.g-b{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+@media (max-width:980px){.g-a,.g-b{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:16px 18px;min-width:0}
+.card h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0;line-height:1.1}
+.card .sub{color:var(--muted);font-size:13.5px;margin:2px 0 0}
+.card-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px 12px;margin-bottom:10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{border:0;background:transparent;padding:5px 11px;font-size:13.5px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--primary);color:#fff}
+.seg button:not([aria-pressed="true"]):hover{background:var(--hover)}
+
+/* trend */
+.chart svg{display:block;width:100%;height:auto}
+.chart text{font-family:var(--font);fill:var(--muted);font-size:11px}
+.chart .val{fill:var(--ink);font-size:10.5px;font-weight:500}
+.chart .grid-l{stroke:var(--line-soft);stroke-width:1}
+.chart .bar{fill:var(--primary)}
+:root[data-theme="dark"] .chart .bar{fill:var(--c1)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .chart .bar{fill:var(--c1)}}
+.chart .bar.dim{opacity:.35}
+.chart .hit{fill:transparent}
+.chart .hit.click{cursor:pointer}
+.chart .hit.click:hover + .bar{fill:var(--accent)}
+
+/* bar lists */
+.blist{display:flex;flex-direction:column;gap:2px}
+.blist.scroll{max-height:372px;overflow-y:auto;padding-right:4px}
+.brow{display:block;width:100%;text-align:left;border:0;background:transparent;border-radius:8px;padding:7px 8px;border-left:3px solid transparent}
+.brow:hover{background:var(--hover)}
+.brow.on{background:var(--primary-soft);border-left-color:var(--accent)}
+.brow .t{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.brow .nm{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brow .vv{white-space:nowrap;font-variant-numeric:tabular-nums}
+.brow .vv b{font-family:var(--display);font-size:20px;font-weight:600}
+.brow .vv span{color:var(--muted);font-size:13px;margin-left:8px}
+.brow .track{display:block;height:7px;background:var(--line-soft);border-radius:4px;margin-top:4px;overflow:hidden}
+.brow .track i{display:block;height:100%;border-radius:4px;background:var(--primary)}
+.brow .note{font-size:12.5px;color:var(--muted);margin-top:2px}
+.empty-note{color:var(--muted);padding:18px 4px;font-size:14px}
+
+/* status + transit blocks */
+.stack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--line-soft);margin:8px 0 10px}
+.stack i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13.5px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend em{width:10px;height:10px;border-radius:3px;display:inline-block}
+.legend b{font-weight:600;font-variant-numeric:tabular-nums}
+.divider{height:1px;background:var(--line-soft);margin:16px 0 12px}
+.hist{display:flex;align-items:flex-end;gap:10px;height:96px;margin-top:8px}
+.hist div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:12.5px;color:var(--muted)}
+.hist i{display:block;width:100%;max-width:56px;background:var(--c2);border-radius:5px 5px 0 0;min-height:2px}
+.hist b{font-weight:600;color:var(--ink);font-size:13px;font-variant-numeric:tabular-nums}
+
+/* table */
+.tcard{margin-top:14px;padding:0;overflow:hidden}
+.tcard .card-h{padding:16px 18px 0;margin-bottom:12px}
+.tscroll{overflow:auto;max-height:640px;border-top:1px solid var(--line)}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;min-width:1240px}
+th{position:sticky;top:0;z-index:2;background:var(--surface);text-align:left;font-weight:600;font-size:13.5px;color:var(--muted);padding:0;border-bottom:1px solid var(--line);white-space:nowrap}
+th button{all:unset;box-sizing:border-box;width:100%;padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:4px}
+th.r button{justify-content:flex-end}
+th button:hover{color:var(--ink);background:var(--hover)}
+th button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+th .ar{font-size:11px;opacity:.9;min-width:9px}
+td{padding:9px 12px;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+td.r,th.r{text-align:right}
+tbody tr.trip{cursor:pointer}
+tbody tr.trip:hover td{background:var(--hover)}
+tbody tr.trip:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.passno{font-family:var(--display);font-size:19px;font-weight:600}
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;font-size:13px;font-weight:500;border:1.5px solid var(--pc,var(--line));color:var(--ink);background:transparent}
+.pill.st{border:0}
+.pill.paid{background:var(--paid-bg);color:var(--paid)}
+.pill.recv{background:var(--recv-bg);color:var(--recv)}
+.pill.unl{background:var(--unl-bg);color:var(--unl)}
+tr.grp td{background:var(--bg);font-weight:600;cursor:pointer;position:sticky;top:41px;z-index:1;border-bottom:1px solid var(--line)}
+tr.grp:hover td{background:var(--primary-soft)}
+tr.grp .g-in{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px}
+tr.grp .car{display:inline-block;width:14px;transition:transform .15s}
+tr.grp.closed .car{transform:rotate(-90deg)}
+tr.grp .gs{font-weight:400;color:var(--muted);font-size:13.5px}
+tfoot td{position:sticky;bottom:0;background:var(--surface);font-weight:600;border-top:2px solid var(--line);border-bottom:0}
+.empty{padding:36px 18px;text-align:center;color:var(--muted)}
+.empty .btn{margin-top:10px;align-self:auto}
+
+/* money */
+.money-h{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:6px}
+.mt{padding:11px 14px;border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);margin:0 -1px -1px 0}
+.mt .l{font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.mt .l em{width:10px;height:10px;border-radius:3px;display:inline-block}
+.mt .v{font-family:var(--display);font-weight:600;font-size:28px;line-height:1.1;font-variant-numeric:tabular-nums}
+.mt .s{font-size:12.5px;color:var(--muted)}
+.mstack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--line-soft);margin:14px 0 4px}
+.mstack i{display:block;height:100%}
+.mtscroll{overflow:auto;max-height:340px;margin-top:14px;border:1px solid var(--line);border-radius:10px}
+.mtscroll table{min-width:720px;font-size:14px}
+.mtscroll th,.mtscroll th span{padding:9px 12px;position:sticky;top:0}
+.mtscroll tbody tr.mr{cursor:pointer}
+.mtscroll tbody tr.mr:hover td{background:var(--hover)}
+.mtscroll tbody tr.mr.on td{background:var(--primary-soft)}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,18,22,.5);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--surface);z-index:41;box-shadow:-14px 0 40px -18px rgba(0,0,0,.5);display:flex;flex-direction:column;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.drawer[hidden],.scrim[hidden]{display:none}
+.drawer header{padding:16px 18px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.drawer header h3{margin:0;font-family:var(--display);font-size:30px;line-height:1;font-weight:700}
+.drawer header p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.drawer .x{border:1px solid var(--line);background:var(--surface);border-radius:8px;width:34px;height:34px;font-size:18px;line-height:1}
+.drawer .x:hover{background:var(--hover)}
+.drawer .body{overflow:auto;padding:6px 18px 24px}
+.drawer h4{font-family:var(--display);font-size:18px;font-weight:600;margin:18px 0 6px}
+.drawer dl{margin:0;display:grid;grid-template-columns:150px 1fr;gap:0}
+.drawer dt,.drawer dd{margin:0;padding:6px 0;border-bottom:1px solid var(--line-soft);font-size:14.5px}
+.drawer dt{color:var(--muted)}
+.drawer dd{text-align:right;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+
+@media (max-width:760px){.toolbar{position:static}}
+@media (max-width:640px){
+  .kpi .v{font-size:32px}
+  .field select,.field input{max-width:none}
+  .field{flex:1 1 140px}
+  .card{padding:14px}
+  .tcard .card-h{padding:14px 14px 0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}</style></head><body><template id="skeleton"><header class="masthead">
+  <div class="row">
+    <div>
+      <h1>RUDRAKSHA ENTERPRISES DASHBOARD</h1>
+      <p id="period"></p>
+    </div>
+    <div class="actions">
+      <button class="theme-btn" id="uploadBtn" type="button">Upload CSV</button>
+      <button class="theme-btn" id="liveBtn" type="button" hidden>Back to live data</button>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch colour theme">Dark mode</button>
+      <input type="file" id="file" accept=".csv,text/csv" multiple hidden>
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="in">
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" autocomplete="off" placeholder="Search pass, truck, transporter" aria-label="Search trips">
+      <span class="hint" id="hits" aria-live="polite"></span>
+    </label>
+    <label class="field">Transporter<select id="fTr"></select></label>
+    <label class="field">Permit number<select id="fPermit"></select></label>
+    <label class="field">Route<select id="fRoute"></select></label>
+    <label class="field">Challan from<input type="date" id="fFrom"></label>
+    <label class="field">Challan to<input type="date" id="fTo"></label>
+    <button class="btn" id="reset" type="button" hidden>Reset filters</button>
+  </div>
+</div>
+
+<main>
+  <div class="notice" id="notice" role="status" hidden><span id="noticeText"></span><span class="nbtns"><button class="btn primary" type="button" id="pubBtn" hidden>Publish for everyone</button><button type="button" id="noticeX" aria-label="Dismiss message">&times;</button></span></div>
+  <p class="insight" id="insight"></p>
+  <section class="kpis" id="kpis" aria-label="Key figures"></section>
+
+  <div class="grid g-a">
+    <section class="card">
+      <div class="card-h">
+        <div>
+          <h2>Daily movement</h2>
+          <p class="sub" id="trendSub"></p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="seg" role="group" aria-label="Measure" id="segMetric">
+            <button type="button" data-m="trips" aria-pressed="true">Trips</button>
+            <button type="button" data-m="mt" aria-pressed="false">UL Net (MT)</button>
+          </div>
+          <div class="seg" role="group" aria-label="Date basis" id="segBasis">
+            <button type="button" data-b="cd" aria-pressed="true">Challan date</button>
+            <button type="button" data-b="ud" aria-pressed="false">Unloading date</button>
+          </div>
+        </div>
+      </div>
+      <div class="chart" id="trend"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-h">
+        <div>
+          <h2>Trips by permit number</h2>
+          <p class="sub">Select a permit to filter the whole dashboard</p>
+        </div>
+      </div>
+      <div class="blist" id="permitList"></div>
+    </section>
+  </div>
+
+  <div class="grid g-b">
+    <section class="card">
+      <div class="card-h">
+        <div>
+          <h2 id="tabTitle">Transporters</h2>
+          <p class="sub" id="tabSub"></p>
+        </div>
+        <div class="seg" role="group" aria-label="Breakdown" id="segTab">
+          <button type="button" data-t="tr" aria-pressed="true">Transporters</button>
+          <button type="button" data-t="truck" aria-pressed="false">Trucks</button>
+          <button type="button" data-t="route" aria-pressed="false">Routes</button>
+        </div>
+      </div>
+      <div class="blist scroll" id="tabList"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-h"><div><h2>Payment status</h2><p class="sub">Trips in the current view</p></div></div>
+      <div id="status"></div>
+      <div class="divider"></div>
+      <h2 style="font-size:19px">Days from challan to unloading</h2>
+      <div class="hist" id="hist"></div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:14px">
+    <div class="card-h">
+      <div>
+        <h2>Advances and deductions</h2>
+        <p class="sub">HSD Amount, Cash Adv, Bank Adv, Other Ded. and TDS Amt. in INR for the trips in view</p>
+      </div>
+    </div>
+    <div class="money-h" id="moneyTiles"></div>
+    <div class="mstack" id="moneyStack" role="img" aria-label="Share of each deduction"></div>
+    <div class="legend" id="moneyLegend"></div>
+    <div class="mtscroll"><table id="moneyTbl"></table></div>
+  </section>
+
+  <section class="card tcard">
+    <div class="card-h">
+      <div>
+        <h2>Pass-wise trip details</h2>
+        <p class="sub" id="tblSub"></p>
+      </div>
+      <div class="seg" role="group" aria-label="Table layout" id="segView">
+        <button type="button" data-v="flat" aria-pressed="true">All trips</button>
+        <button type="button" data-v="group" aria-pressed="false">Group by permit</button>
+      </div>
+    </div>
+    <div class="tscroll" id="tscroll"><table id="tbl"></table></div>
+  </section>
+</main>
+
+<div class="drop" id="drop" hidden>Drop CSV file here to load it</div>
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="dTitle">
+  <header>
+    <div><h3 id="dTitle"></h3><p id="dSub"></p></div>
+    <button class="x" id="dClose" type="button" aria-label="Close trip details">&times;</button>
+  </header>
+  <div class="body" id="dBody"></div>
+</aside></template><script type="application/json" id="appData">{"rows":[{"id":1,"ws":null,"cd":"2026-09-01","ud":"2026-09-02","tp":"AWPL0001/673","truck":"BR45GB4131","permit":"AWPL0001","pass_":"673","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":59.24,"lt":16.82,"ln":42.42,"ug":59.24,"ut":16.82,"un":42.42,"sh":0.0,"rate":1320.0,"fr":55994.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":30762.0,"pump":"AWPL","od":500.0,"dtw":"UNLOADING CHARGE","tds":559.94,"td":31821.94,"net":24172.46,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1096","rcv":"2026-09-03","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":2,"ws":null,"cd":"2026-09-02","ud":"2026-09-03","tp":"AWPL0001/712","truck":"BR45GB1423","permit":"AWPL0001","pass_":"712","broker":"FOUJI ROADLINE","owner":"AMBEY TRANSPORT","holder":"FAUZI ROADLINES","lg":54.62,"lt":15.64,"ln":38.98,"ug":55.82,"ut":16.84,"un":38.98,"sh":0.0,"rate":1320.0,"fr":51453.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":33999.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":514.54,"td":35013.54,"net":16440.06,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1096","rcv":"2026-09-03","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":3,"ws":null,"cd":"2026-09-02","ud":"2026-09-02","tp":"AWPL0001/751","truck":"BR24GD0725","permit":"AWPL0001","pass_":"751","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":61.48,"lt":15.64,"ln":45.84,"ug":58.0,"ut":15.0,"un":43.0,"sh":2.84,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":31819.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":567.6,"td":32886.6,"net":23873.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1096","rcv":"2026-09-03","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":4,"ws":null,"cd":"2026-09-02","ud":"2026-09-03","tp":"AWPL0001/752","truck":"BR24GD4921","permit":"AWPL0001","pass_":"752","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":65.19,"lt":15.64,"ln":49.55,"ug":58.0,"ut":15.0,"un":43.0,"sh":6.55,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":500.0,"dtw":"UNLOADING CHARGE","tds":567.6,"td":1067.6,"net":55692.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1096","rcv":"2026-09-03","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":5,"ws":null,"cd":"2026-09-02","ud":"2026-09-03","tp":"ITV0001/1230","truck":"UP65MT4131","permit":"ITV0001","pass_":"1230","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":63.42,"lt":17.28,"ln":46.14,"ug":63.42,"ut":17.28,"un":46.14,"sh":0.0,"rate":770.0,"fr":35527.8,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":25691.0,"pump":"VINAYAK FUELS HINDUAARI","od":0.0,"dtw":null,"tds":355.28,"td":26046.28,"net":9481.52,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1099","rcv":"2026-09-07","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":6,"ws":null,"cd":"2026-09-02","ud":"2026-09-03","tp":"ITV0001/1231","truck":"UP65LT4131","permit":"ITV0001","pass_":"1231","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":67.76,"lt":17.48,"ln":50.28,"ug":67.76,"ut":17.48,"un":50.28,"sh":0.0,"rate":770.0,"fr":38715.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":25609.0,"pump":"VINAYAK FUELS HINDUAARI","od":0.0,"dtw":null,"tds":387.16,"td":25996.16,"net":12719.44,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1099","rcv":"2026-09-07","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":7,"ws":null,"cd":"2026-09-02","ud":"2026-09-03","tp":"ITV0001/1237","truck":"UP64BT6266","permit":"ITV0001","pass_":"1237","broker":"SRI JAGDAMBA","owner":"SRI JAGDAMBA VENTURES","holder":null,"lg":68.64,"lt":16.84,"ln":51.8,"ug":68.64,"ut":16.84,"un":51.8,"sh":0.0,"rate":770.0,"fr":39886.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":21237.94,"pump":"VINAYAK FUELS HINDUAARI","od":0.0,"dtw":null,"tds":0.0,"td":21237.94,"net":18648.06,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":null,"rcv":null,"pay":null,"bank":null,"cc":null,"vt":"Non-Union","st":"Unloaded"},{"id":8,"ws":null,"cd":"2026-09-03","ud":"2026-09-04","tp":"AWPL0001/769","truck":"BR24GD0478","permit":"AWPL0001","pass_":"769","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":61.92,"lt":15.96,"ln":45.96,"ug":58.0,"ut":15.0,"un":43.0,"sh":2.96,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":500.0,"dtw":"un charges","tds":567.6,"td":1067.6,"net":55692.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1096","rcv":"2026-09-03","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":9,"ws":"234191/1010","cd":"2026-09-03","ud":"2026-09-05","tp":"INFRAHAUL01/250","truck":"UP61AT0327","permit":"INFRAHAUL01","pass_":"250","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":59.79,"lt":14.81,"ln":44.98,"ug":61.09,"ut":14.0,"un":47.09,"sh":0.0,"rate":1260.0,"fr":56674.8,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":19000.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":566.75,"td":29566.75,"net":27108.05,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1098","rcv":"2026-09-07","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":10,"ws":"234192/1008","cd":"2026-09-03","ud":"2026-09-05","tp":"INFRAHAUL01/451","truck":"UP62AT7878","permit":"INFRAHAUL01","pass_":"451","broker":"FOUJI ROADLINE","owner":"GANGA SAGAR TRANSPORT SERVICE","holder":"FAUZI ROADLINES","lg":64.0,"lt":15.28,"ln":48.72,"ug":65.26,"ut":15.0,"un":50.26,"sh":0.0,"rate":1260.0,"fr":61387.2,"ca":12000.0,"ba":0.0,"hsdl":0.0,"hsda":17875.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":613.87,"td":30488.87,"net":30898.33,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1098","rcv":"2026-09-07","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":11,"ws":"234193","cd":"2026-09-03","ud":"2026-09-05","tp":"INFRAHAUL01/452","truck":"UP61AT3357","permit":"INFRAHAUL01","pass_":"452","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":64.0,"lt":15.27,"ln":48.73,"ug":65.07,"ut":14.57,"un":50.5,"sh":0.0,"rate":1260.0,"fr":61399.8,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":20000.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":614.0,"td":30614.0,"net":30785.8,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1098","rcv":"2026-09-07","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":12,"ws":"2343361/1037","cd":"2026-09-04","ud":"2026-09-05","tp":"INFRAHAUL01/467","truck":"BR24GD1018","permit":"INFRAHAUL01","pass_":"467","broker":"VIPENDRA PRATAP SINGH","owner":"VIKAS SINGH","holder":"VIPENDRA PRATAP SINGH","lg":56.22,"lt":16.1,"ln":40.12,"ug":57.24,"ut":15.8,"un":41.44,"sh":0.0,"rate":1250.0,"fr":50150.0,"ca":5000.0,"ba":0.0,"hsdl":0.0,"hsda":25000.0,"pump":"DURGA FILLING","od":5000.0,"dtw":null,"tds":501.5,"td":35501.5,"net":14648.5,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1097","rcv":"2026-09-05","pay":"2026-09-07","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":13,"ws":null,"cd":"2026-09-05","ud":"2026-09-06","tp":"AWPL0001/841","truck":"BR24GD7421","permit":"AWPL0001","pass_":"841","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":60.48,"lt":15.88,"ln":44.6,"ug":58.0,"ut":15.0,"un":43.0,"sh":1.6,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":500.0,"dtw":"UN CHARGES","tds":567.6,"td":1067.6,"net":55692.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1104","rcv":"2026-09-08","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":14,"ws":"5372","cd":"2026-09-05","ud":"2026-09-07","tp":"AWPL0001/842","truck":"BR24GD5369","permit":"AWPL0001","pass_":"842","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":71.74,"lt":16.1,"ln":55.64,"ug":58.0,"ut":15.0,"un":43.0,"sh":12.64,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":500.0,"dtw":"UN CHARGES","tds":567.6,"td":1067.6,"net":55692.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1104","rcv":"2026-09-08","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":15,"ws":null,"cd":"2026-09-05","ud":"2026-09-06","tp":"AWPL0001/847","truck":"BR45GB4131","permit":"AWPL0001","pass_":"847","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":58.92,"lt":16.69,"ln":42.23,"ug":58.92,"ut":16.69,"un":42.23,"sh":0.0,"rate":1320.0,"fr":55743.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":29513.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":557.44,"td":30570.44,"net":25173.16,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1108","rcv":"2026-09-08","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":16,"ws":"26370","cd":"2026-09-05","ud":"2026-09-08","tp":"AWPL0001/848","truck":"BR24GD5370","permit":"AWPL0001","pass_":"848","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":58.35,"lt":15.795,"ln":42.555,"ug":58.35,"ut":15.795,"un":42.555,"sh":0.0,"rate":1320.0,"fr":56172.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":500.0,"dtw":"UN CHARGES","tds":561.73,"td":1061.73,"net":55110.87,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1108","rcv":"2026-09-08","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":17,"ws":"5327","cd":"2026-09-05","ud":"2026-09-07","tp":"AWPL0001/855","truck":"BR45GB4322","permit":"AWPL0001","pass_":"855","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":58.46,"lt":16.85,"ln":41.61,"ug":58.46,"ut":16.85,"un":41.61,"sh":0.0,"rate":1320.0,"fr":54925.2,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":24705.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":549.25,"td":25754.25,"net":29170.95,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1109","rcv":"2026-09-08","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":18,"ws":null,"cd":"2026-09-05","ud":"2026-09-06","tp":"AWPL0001/859","truck":"BR45GB4320","permit":"AWPL0001","pass_":"859","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":59.23,"lt":16.13,"ln":43.1,"ug":58.0,"ut":15.0,"un":43.0,"sh":0.1,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":23648.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":567.6,"td":24715.6,"net":32044.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1105","rcv":"2026-09-08","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":19,"ws":"5343","cd":"2026-09-05","ud":"2026-09-07","tp":"AWPL0001/860","truck":"BR45GB4321","permit":"AWPL0001","pass_":"860","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":57.12,"lt":16.3,"ln":40.82,"ug":57.12,"ut":16.3,"un":40.82,"sh":0.0,"rate":1320.0,"fr":53882.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":24994.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":538.82,"td":26032.82,"net":27849.58,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1105","rcv":"2026-09-08","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":20,"ws":null,"cd":"2026-09-05","ud":"2026-09-06","tp":"AWPL0001/862","truck":"BR45GB4319","permit":"AWPL0001","pass_":"862","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":57.99,"lt":16.3,"ln":41.69,"ug":57.99,"ut":16.3,"un":41.69,"sh":0.0,"rate":1320.0,"fr":55030.8,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":24321.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":550.31,"td":25371.31,"net":29659.49,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1105","rcv":"2026-09-08","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":21,"ws":null,"cd":"2026-09-05","ud":"2026-09-07","tp":"AWPL0001/867","truck":"BR45GB1423","permit":"AWPL0001","pass_":"867","broker":"FOUJI ROADLINE","owner":"AMBEY TRANSPORT","holder":"FAUZI ROADLINES","lg":58.07,"lt":16.9,"ln":41.17,"ug":58.07,"ut":16.9,"un":41.17,"sh":0.0,"rate":1320.0,"fr":54344.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":26916.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":543.44,"td":27959.44,"net":26384.96,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1109","rcv":"2026-09-08","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":22,"ws":"234431","cd":"2026-09-05","ud":"2026-09-06","tp":"INFRAHAUL01/469","truck":"UP65KT7500","permit":"INFRAHAUL01","pass_":"469","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":65.57,"lt":16.82,"ln":48.75,"ug":65.75,"ut":17.0,"un":48.75,"sh":0.0,"rate":1260.0,"fr":61425.0,"ca":7500.0,"ba":0.0,"hsdl":0.0,"hsda":29417.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":614.25,"td":37531.25,"net":23893.75,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1106","rcv":"2026-09-08","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":23,"ws":null,"cd":"2026-09-05","ud":"2026-09-07","tp":"ITV0001/1266","truck":"UP64BT6911","permit":"ITV0001","pass_":"1266","broker":"AL ANSAR","owner":"AASHIRVAD TRANSPORT","holder":"AL ANSAR ENTERPRISES","lg":47.7,"lt":0.0,"ln":47.7,"ug":64.46,"ut":16.76,"un":47.7,"sh":0.0,"rate":770.0,"fr":36729.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":21388.0,"pump":"VINAYAK FUELS HINDUAARI","od":0.0,"dtw":null,"tds":367.29,"td":21755.29,"net":14973.71,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1100","rcv":"2026-09-07","pay":"2026-09-07","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":24,"ws":null,"cd":"2026-09-06","ud":"2026-09-08","tp":"AWPL0001/882","truck":"UP62AT3377","permit":"AWPL0001","pass_":"882","broker":"SELF","owner":"UDAY PRATAP YADAV","holder":"UDAY PRATAP YADAV","lg":40.67,"lt":13.91,"ln":26.76,"ug":40.67,"ut":13.91,"un":26.76,"sh":0.0,"rate":1300.0,"fr":34788.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":10000.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":347.88,"td":10847.88,"net":23940.12,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1102","rcv":"2026-09-08","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":25,"ws":"5392","cd":"2026-09-06","ud":"2026-09-07","tp":"AWPL0001/883","truck":"BR24GD2719","permit":"AWPL0001","pass_":"883","broker":"FOUJI ROADLINE","owner":"GANGA SAGAR TRANSPORT SERVICE","holder":"FAUZI ROADLINES","lg":63.09,"lt":16.57,"ln":46.52,"ug":58.0,"ut":15.0,"un":43.0,"sh":3.52,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":24898.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":567.6,"td":25965.6,"net":30794.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1109","rcv":"2026-09-08","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":26,"ws":"5370","cd":"2026-09-06","ud":"2026-09-07","tp":"AWPL0001/912","truck":"BR24GD0725","permit":"AWPL0001","pass_":"912","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":59.21,"lt":15.95,"ln":43.26,"ug":58.0,"ut":15.0,"un":43.0,"sh":0.26,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":29543.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":567.6,"td":30610.6,"net":26149.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1110","rcv":"2026-09-08","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":27,"ws":"5379","cd":"2026-09-06","ud":"2026-09-07","tp":"AWPL0001/913","truck":"BR24GD4921","permit":"AWPL0001","pass_":"913","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":59.29,"lt":16.42,"ln":42.87,"ug":59.29,"ut":16.42,"un":42.87,"sh":0.0,"rate":1320.0,"fr":56588.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":35651.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":565.88,"td":36716.88,"net":19871.52,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1110","rcv":"2026-09-08","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":28,"ws":"5390","cd":"2026-09-06","ud":"2026-09-07","tp":"AWPL0001/929","truck":"UP65HT9087","permit":"AWPL0001","pass_":"929","broker":"SELF","owner":"JITENDR KUMAR SINGH","holder":"JITENDR KUMAR SINGH","lg":57.23,"lt":17.16,"ln":40.07,"ug":57.23,"ut":17.16,"un":40.07,"sh":0.0,"rate":1310.0,"fr":52491.7,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":19000.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":524.92,"td":20024.92,"net":32466.78,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1111","rcv":"2026-09-08","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":29,"ws":"5387","cd":"2026-09-06","ud":"2026-09-07","tp":"AWPL0001/932","truck":"BR24GD0478","permit":"AWPL0001","pass_":"932","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":58.79,"lt":16.11,"ln":42.68,"ug":58.79,"ut":16.11,"un":42.68,"sh":0.0,"rate":1320.0,"fr":56337.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":33500.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":563.38,"td":34563.38,"net":21774.22,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1110","rcv":"2026-09-08","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":30,"ws":null,"cd":"2026-09-06","ud":"2026-09-08","tp":"INFRAHAUL01/486","truck":"UP65MT4131","permit":"INFRAHAUL01","pass_":"486","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":62.75,"lt":16.98,"ln":45.77,"ug":69.61,"ut":17.1,"un":52.51,"sh":0.0,"rate":1260.0,"fr":57670.2,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":17015.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":576.7,"td":24591.7,"net":33078.5,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1106","rcv":"2026-09-08","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":31,"ws":"234619","cd":"2026-09-06","ud":"2026-09-08","tp":"INFRAHAUL01/487","truck":"UP65LT4131","permit":"INFRAHAUL01","pass_":"487","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":68.86,"lt":17.03,"ln":51.83,"ug":69.67,"ut":16.9,"un":52.77,"sh":0.0,"rate":1260.0,"fr":65305.8,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":17211.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":653.06,"td":24864.06,"net":40441.74,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1106","rcv":"2026-09-08","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":32,"ws":"234787","cd":"2026-09-06","ud":"2026-09-08","tp":"INFRAHAUL01/502","truck":"UP61AT0327","permit":"INFRAHAUL01","pass_":"502","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":63.62,"lt":14.75,"ln":48.87,"ug":64.5,"ut":14.2,"un":50.3,"sh":0.0,"rate":1260.0,"fr":61576.2,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":18500.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":615.76,"td":29115.76,"net":32460.44,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1107","rcv":"2026-09-08","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":33,"ws":"234804","cd":"2026-09-06","ud":"2026-09-08","tp":"INFRAHAUL01/507","truck":"UP61AT3357","permit":"INFRAHAUL01","pass_":"507","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":64.0,"lt":15.16,"ln":48.84,"ug":65.61,"ut":14.7,"un":50.91,"sh":0.0,"rate":1260.0,"fr":61538.4,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":18840.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":615.38,"td":29455.38,"net":32083.02,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1107","rcv":"2026-09-08","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":34,"ws":"20560","cd":"2026-09-06","ud":"2026-09-07","tp":"INFRAHAUL01/775","truck":"UP62DT2445","permit":"INFRAHAUL01","pass_":"775","broker":"SELF","owner":"GAURAV PRATAP YADAV","holder":"GAURAV PRATAP YADAV","lg":67.91,"lt":16.34,"ln":51.57,"ug":69.05,"ut":16.35,"un":52.7,"sh":0.0,"rate":1200.0,"fr":61884.0,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":30000.0,"pump":"DURGA FILLING","od":6000.0,"dtw":null,"tds":618.84,"td":46618.84,"net":15265.16,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1101","rcv":"2026-09-07","pay":"2026-09-07","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":35,"ws":null,"cd":"2026-09-06","ud":"2026-09-07","tp":"ITV0002/237","truck":"UP63BT2389","permit":"ITV0002","pass_":"237","broker":"SELF","owner":"VISHAL YADAV","holder":"VISHAL YADAV","lg":76.22,"lt":17.52,"ln":58.7,"ug":76.22,"ut":17.52,"un":58.7,"sh":0.0,"rate":790.0,"fr":46373.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":38030.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":463.73,"td":38493.73,"net":7879.27,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1103","rcv":"2026-09-08","pay":"2026-09-08","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":36,"ws":null,"cd":"2026-09-06","ud":"2026-09-07","tp":"ITV0002/267","truck":"UP64BT9589","permit":"ITV0002","pass_":"267","broker":"AL ANSAR","owner":"AMBEY TRANSPORT","holder":"AL ANSAR ENTERPRISES","lg":72.5,"lt":16.98,"ln":55.52,"ug":72.5,"ut":16.98,"un":55.52,"sh":0.0,"rate":805.0,"fr":44693.6,"ca":0.0,"ba":5000.0,"hsdl":0.0,"hsda":26018.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":446.94,"td":31464.94,"net":13228.66,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1112","rcv":"2026-09-08","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":37,"ws":null,"cd":"2026-09-06","ud":"2026-09-07","tp":"ITV0002/268","truck":"UP65LT7486","permit":"ITV0002","pass_":"268","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":75.86,"lt":17.24,"ln":58.62,"ug":75.86,"ut":17.24,"un":58.62,"sh":0.0,"rate":805.0,"fr":47189.1,"ca":0.0,"ba":5000.0,"hsdl":0.0,"hsda":30439.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":471.89,"td":35910.89,"net":11278.21,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1112","rcv":"2026-09-08","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":38,"ws":null,"cd":"2026-09-06","ud":"2026-09-07","tp":"ITV0002/270","truck":"BR24GD2868","permit":"ITV0002","pass_":"270","broker":"AL ANSAR","owner":"AMBEY TRANSPORT","holder":"AL ANSAR ENTERPRISES","lg":74.5,"lt":15.88,"ln":58.62,"ug":74.5,"ut":15.88,"un":58.62,"sh":0.0,"rate":805.0,"fr":47189.1,"ca":0.0,"ba":5000.0,"hsdl":0.0,"hsda":36500.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":471.89,"td":41971.89,"net":5217.21,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1112","rcv":"2026-09-08","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":39,"ws":"26472","cd":"2026-09-07","ud":"2026-09-09","tp":"AWPL0001/1018","truck":"BR45GB4131","permit":"AWPL0001","pass_":"1018","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":55.05,"lt":16.62,"ln":38.43,"ug":55.05,"ut":16.62,"un":38.43,"sh":0.0,"rate":1320.0,"fr":50727.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":28455.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":507.28,"td":29462.28,"net":21265.32,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1118","rcv":"2026-09-09","pay":"2026-09-12","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":40,"ws":"234880","cd":"2026-09-07","ud":"2026-09-08","tp":"INFRAHAUL01/509","truck":"BR24GD1018","permit":"INFRAHAUL01","pass_":"509","broker":"VIPENDRA PRATAP SINGH","owner":"VIKAS SINGH","holder":"VIPENDRA PRATAP SINGH","lg":57.5,"lt":16.06,"ln":41.44,"ug":57.5,"ut":15.9,"un":41.6,"sh":0.0,"rate":1250.0,"fr":51800.0,"ca":5000.0,"ba":0.0,"hsdl":0.0,"hsda":25000.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":518.0,"td":30518.0,"net":21282.0,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1113","rcv":"2026-09-09","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":41,"ws":"234917/1375","cd":"2026-09-07","ud":"2026-09-09","tp":"INFRAHAUL01/518","truck":"UP62AT7878","permit":"INFRAHAUL01","pass_":"518","broker":"FOUJI ROADLINE","owner":"GANGA SAGAR TRANSPORT SERVICE","holder":"FAUZI ROADLINES","lg":63.6,"lt":15.05,"ln":48.55,"ug":64.5,"ut":14.8,"un":49.7,"sh":0.0,"rate":1260.0,"fr":61173.0,"ca":12000.0,"ba":0.0,"hsdl":0.0,"hsda":16755.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":611.73,"td":29366.73,"net":31806.27,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1127","rcv":"2026-09-10","pay":"2026-09-12","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":42,"ws":null,"cd":"2026-09-07","ud":"2026-09-08","tp":"ITV0002/330","truck":"UP64BT4431","permit":"ITV0002","pass_":"330","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":69.18,"lt":16.84,"ln":52.34,"ug":69.18,"ut":16.84,"un":52.34,"sh":0.0,"rate":805.0,"fr":42133.7,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":24500.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":421.34,"td":24921.34,"net":17212.36,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1114","rcv":"2026-09-09","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":43,"ws":"26445","cd":"2026-09-08","ud":"2026-09-09","tp":"AWPL0001/1025","truck":"BR45GB4319","permit":"AWPL0001","pass_":"1025","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":57.55,"lt":16.225,"ln":41.325,"ug":57.55,"ut":16.225,"un":41.325,"sh":0.0,"rate":1320.0,"fr":54549.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":21822.0,"pump":"VINAYAK FUELS HINDUAARI","od":500.0,"dtw":"UN CHARGES","tds":545.49,"td":22867.49,"net":31681.51,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1115","rcv":"2026-09-09","pay":"2026-09-12","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":44,"ws":null,"cd":"2026-09-08","ud":"2026-09-09","tp":"AWPL0001/1039","truck":"BR24GD7421","permit":"AWPL0001","pass_":"1039","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":56.56,"lt":16.09,"ln":40.47,"ug":56.56,"ut":16.09,"un":40.47,"sh":0.0,"rate":1320.0,"fr":53420.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":33646.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":534.2,"td":34680.2,"net":18740.2,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1119","rcv":"2026-09-09","pay":"2026-09-12","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":45,"ws":"26458","cd":"2026-09-08","ud":"2026-09-09","tp":"AWPL0001/1042","truck":"BR45GB4320","permit":"AWPL0001","pass_":"1042","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":57.99,"lt":16.24,"ln":41.75,"ug":57.99,"ut":16.24,"un":41.75,"sh":0.0,"rate":1320.0,"fr":55110.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":22611.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":551.1,"td":23662.1,"net":31447.9,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1117","rcv":"2026-09-09","pay":"2026-09-12","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":46,"ws":null,"cd":"2026-09-08","ud":"2026-09-08","tp":"AWPL0001/1051","truck":"BR24GD0958","permit":"AWPL0001","pass_":"1051","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":59.215,"lt":15.725,"ln":43.49,"ug":58.0,"ut":15.0,"un":43.0,"sh":0.49,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":500.0,"dtw":"un charges","tds":567.6,"td":1067.6,"net":55692.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1121","rcv":"2026-09-10","pay":"2026-09-12","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":47,"ws":null,"cd":"2026-09-08","ud":"2026-09-10","tp":"AWPL0001/1054","truck":"BR45GB1423","permit":"AWPL0001","pass_":"1054","broker":"FOUJI ROADLINE","owner":"AMBEY TRANSPORT","holder":"FAUZI ROADLINES","lg":58.475,"lt":16.855,"ln":41.62,"ug":58.475,"ut":16.855,"un":41.62,"sh":0.0,"rate":1320.0,"fr":54938.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":30002.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":549.38,"td":31051.38,"net":23887.02,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1125","rcv":"2026-09-10","pay":"2026-09-12","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":48,"ws":"235097","cd":"2026-09-08","ud":"2026-09-09","tp":"INFRAHAUL01/527","truck":"UP65KT7500","permit":"INFRAHAUL01","pass_":"527","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":64.22,"lt":16.78,"ln":47.44,"ug":62.83,"ut":16.0,"un":46.83,"sh":0.61,"rate":1260.0,"fr":59005.8,"ca":7500.0,"ba":0.0,"hsdl":0.0,"hsda":27928.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":590.06,"td":36018.06,"net":22987.74,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1135","rcv":"2026-09-12","pay":"2026-09-12","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":49,"ws":null,"cd":"2026-09-08","ud":"2026-09-09","tp":"ITV0001/1348","truck":"UP64BT6911","permit":"ITV0001","pass_":"1348","broker":"AL ANSAR","owner":"AASHIRVAD TRANSPORT","holder":"AL ANSAR ENTERPRISES","lg":61.62,"lt":16.42,"ln":45.2,"ug":61.62,"ut":16.42,"un":45.2,"sh":0.0,"rate":770.0,"fr":34804.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":26860.0,"pump":"VINAYAK FUELS HINDUAARI","od":0.0,"dtw":null,"tds":348.04,"td":27208.04,"net":7595.96,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1126","rcv":"2026-09-10","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":50,"ws":null,"cd":"2026-09-08","ud":"2026-09-09","tp":"ITV0001/1355","truck":"UP65LT7779","permit":"ITV0001","pass_":"1355","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":69.1,"lt":16.7,"ln":52.4,"ug":69.1,"ut":16.7,"un":52.4,"sh":0.0,"rate":770.0,"fr":40348.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":20000.0,"pump":"VINAYAK FUELS HINDUAARI","od":0.0,"dtw":null,"tds":403.48,"td":20403.48,"net":19944.52,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1164","rcv":"2026-09-09","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":51,"ws":null,"cd":"2026-09-08","ud":"2026-09-09","tp":"ITV0002/344","truck":"UP63BT4558","permit":"ITV0002","pass_":"344","broker":"SELF","owner":"VISHAL YADAV","holder":"VISHAL YADAV","lg":70.3,"lt":17.72,"ln":52.58,"ug":70.3,"ut":17.72,"un":52.58,"sh":0.0,"rate":800.0,"fr":42064.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":34201.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":420.64,"td":34621.64,"net":7442.36,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1123","rcv":"2026-09-10","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":52,"ws":null,"cd":"2026-09-08","ud":"2026-09-09","tp":"ITV0002/369","truck":"UP63BT2389","permit":"ITV0002","pass_":"369","broker":"SELF","owner":"VISHAL YADAV","holder":"VISHAL YADAV","lg":74.06,"lt":17.44,"ln":56.62,"ug":74.06,"ut":17.44,"un":56.62,"sh":0.0,"rate":800.0,"fr":45296.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":24858.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":452.96,"td":25310.96,"net":19985.04,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1116","rcv":"2026-09-09","pay":"2026-09-09","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":53,"ws":null,"cd":"2026-09-08","ud":"2026-09-10","tp":"ITV0002/411","truck":"BR24GD2868","permit":"ITV0002","pass_":"411","broker":"AL ANSAR","owner":"AMBEY TRANSPORT","holder":"AL ANSAR ENTERPRISES","lg":67.32,"lt":16.16,"ln":51.16,"ug":67.32,"ut":16.16,"un":51.16,"sh":0.0,"rate":805.0,"fr":41183.8,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":21700.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":411.84,"td":22111.84,"net":19071.96,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1124","rcv":"2026-09-10","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":54,"ws":null,"cd":"2026-09-08","ud":"2026-09-10","tp":"ITV0002/412","truck":"UP65LT7486","permit":"ITV0002","pass_":"412","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":69.26,"lt":17.5,"ln":51.76,"ug":69.26,"ut":17.5,"un":51.76,"sh":0.0,"rate":805.0,"fr":41666.8,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":21001.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":416.67,"td":21417.67,"net":20249.13,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1124","rcv":"2026-09-10","pay":"2026-09-10","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":55,"ws":"26517","cd":"2026-09-09","ud":"2026-09-10","tp":"AWPL0001/1081","truck":"BR24GD0478","permit":"AWPL0001","pass_":"1081","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":60.325,"lt":16.105,"ln":44.22,"ug":58.0,"ut":15.0,"un":43.0,"sh":1.22,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":24521.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":567.6,"td":25588.6,"net":31171.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1129","rcv":"2026-09-11","pay":"2026-09-14","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":56,"ws":"26536","cd":"2026-09-09","ud":"2026-09-11","tp":"AWPL0001/1101","truck":"BR24GD5369","permit":"AWPL0001","pass_":"1101","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":54.7,"lt":16.0,"ln":38.7,"ug":54.7,"ut":16.0,"un":38.7,"sh":0.0,"rate":1320.0,"fr":51084.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":30762.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":510.84,"td":31772.84,"net":19311.16,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1132","rcv":"2026-09-12","pay":"2026-09-14","bank":"ICICI BANK","cc":"VARANASI","vt":"Union","st":"Already Paid"},{"id":57,"ws":null,"cd":"2026-09-09","ud":"2026-09-11","tp":"AWPL0001/1102","truck":"BR45GB4322","permit":"AWPL0001","pass_":"1102","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":40.87,"lt":0.0,"ln":40.87,"ug":57.45,"ut":16.58,"un":40.87,"sh":0.0,"rate":1320.0,"fr":53948.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":26725.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":539.48,"td":27764.48,"net":26183.92,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1133","rcv":"2026-09-12","pay":"2026-09-14","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":58,"ws":"26574","cd":"2026-09-09","ud":"2026-09-11","tp":"AWPL0001/1103","truck":"BR45GB4321","permit":"AWPL0001","pass_":"1103","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":58.005,"lt":16.235,"ln":41.77,"ug":58.005,"ut":16.235,"un":41.77,"sh":0.0,"rate":1320.0,"fr":55136.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":26000.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":551.36,"td":27051.36,"net":28085.04,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1132","rcv":"2026-09-12","pay":"2026-09-14","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":59,"ws":"26537","cd":"2026-09-09","ud":"2026-09-11","tp":"AWPL0001/1105","truck":"BR24GD0725","permit":"AWPL0001","pass_":"1105","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":57.375,"lt":15.935,"ln":41.44,"ug":57.375,"ut":15.935,"un":41.44,"sh":0.0,"rate":1320.0,"fr":54700.8,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":27205.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":547.01,"td":28252.01,"net":26448.79,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1131","rcv":"2026-09-12","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":60,"ws":"26542","cd":"2026-09-09","ud":"2026-09-11","tp":"AWPL0001/1113","truck":"BR24GD4921","permit":"AWPL0001","pass_":"1113","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":59.825,"lt":16.29,"ln":43.535,"ug":58.0,"ut":15.0,"un":43.0,"sh":0.535,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":23155.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":567.6,"td":24222.6,"net":32537.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1142","rcv":"2026-09-11","pay":"2026-09-18","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":61,"ws":"26549","cd":"2026-09-09","ud":"2026-09-11","tp":"AWPL0001/1121","truck":"BR24GD7581","permit":"AWPL0001","pass_":"1121","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":60.365,"lt":15.23,"ln":45.135,"ug":58.0,"ut":15.0,"un":43.0,"sh":2.135,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":30011.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":567.6,"td":31078.6,"net":25681.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1131","rcv":"2026-09-12","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":62,"ws":"26548","cd":"2026-09-09","ud":"2026-09-11","tp":"AWPL0001/1122","truck":"BR24GD7582","permit":"AWPL0001","pass_":"1122","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":59.615,"lt":16.0,"ln":43.615,"ug":58.0,"ut":15.0,"un":43.0,"sh":0.615,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":30819.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":567.6,"td":31886.6,"net":24873.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1129","rcv":"2026-09-11","pay":"2026-09-14","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":63,"ws":"26621","cd":"2026-09-10","ud":"2026-09-12","tp":"AWPL0001/1133","truck":"BR24GD2719","permit":"AWPL0001","pass_":"1133","broker":"FOUJI ROADLINE","owner":"GANGA SAGAR TRANSPORT SERVICE","holder":"FAUZI ROADLINES","lg":58.575,"lt":16.57,"ln":42.005,"ug":58.575,"ut":16.57,"un":42.005,"sh":0.0,"rate":1320.0,"fr":55446.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":27652.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":554.47,"td":28706.47,"net":26740.13,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1144","rcv":"2026-09-16","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":64,"ws":"26710","cd":"2026-09-10","ud":"2026-09-13","tp":"AWPL0001/1175","truck":"BR24GD5370","permit":"AWPL0001","pass_":"1175","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":58.375,"lt":15.98,"ln":42.395,"ug":58.375,"ut":15.98,"un":42.395,"sh":0.0,"rate":1320.0,"fr":55961.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":36501.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":559.61,"td":37560.61,"net":18400.79,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1145","rcv":"2026-09-16","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":65,"ws":"266697","cd":"2026-09-10","ud":"2026-09-14","tp":"AWPL0001/1178","truck":"BR06GG1694","permit":"AWPL0001","pass_":"1178","broker":"FOUJI ROADLINE","owner":"FAUZI ROADLINES","holder":"FAUZI ROADLINES","lg":51.78,"lt":14.3,"ln":37.48,"ug":51.78,"ut":14.3,"un":37.48,"sh":0.0,"rate":1320.0,"fr":49473.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":500.0,"dtw":"UN CHARGES","tds":494.74,"td":994.74,"net":48478.86,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1146","rcv":"2026-09-16","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":66,"ws":"26686","cd":"2026-09-10","ud":"2026-09-12","tp":"AWPL0001/1189","truck":"BR24GB4319","permit":"AWPL0001","pass_":"1189","broker":"FOUJI ROADLINE","owner":"FAUZI ROADLINES","holder":"FAUZI ROADLINES","lg":57.045,"lt":16.325,"ln":40.72,"ug":57.045,"ut":16.325,"un":40.72,"sh":0.0,"rate":1320.0,"fr":53750.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":23840.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":537.5,"td":24877.5,"net":28872.9,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1147","rcv":"2026-09-16","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":67,"ws":"235626","cd":"2026-09-10","ud":"2026-09-12","tp":"DRV0001/12868","truck":"BR45GB4668","permit":"DRV0001","pass_":"12868","broker":"FOUJI ROADLINE","owner":"GANGA SAGAR TRANSPORT SERVICE","holder":"FAUZI ROADLINES","lg":68.41,"lt":16.02,"ln":52.39,"ug":68.9,"ut":16.54,"un":52.36,"sh":0.03,"rate":900.0,"fr":47124.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":0.0,"dtw":null,"tds":471.24,"td":471.24,"net":46652.76,"cons":"NKC","party":"DESHRAJ VENTURES","lp":"NTPC VINDHYANAGAR,MP","up":"CHANDAULI (UP)","ref":"1153","rcv":"2026-09-16","pay":"2026-09-19","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":68,"ws":"235627","cd":"2026-09-10","ud":"2026-09-12","tp":"DRV0001/12869","truck":"UP65LT7400","permit":"DRV0001","pass_":"12869","broker":"FOUJI ROADLINE","owner":"GANGA SAGAR TRANSPORT SERVICE","holder":"FAUZI ROADLINES","lg":70.84,"lt":16.9,"ln":53.94,"ug":69.2,"ut":16.54,"un":52.66,"sh":1.28,"rate":900.0,"fr":47394.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":0.0,"dtw":null,"tds":473.94,"td":473.94,"net":46920.06,"cons":"NKC","party":"DESHRAJ VENTURES","lp":"NTPC VINDHYANAGAR,MP","up":"CHANDAULI (UP)","ref":"1153","rcv":"2026-09-16","pay":"2026-09-19","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":69,"ws":"20853","cd":"2026-09-10","ud":"2026-09-12","tp":"INFRAHAUL01/299","truck":"UP62CT8180","permit":"INFRAHAUL01","pass_":"299","broker":"PRAMOD KUMAR","owner":"PRAMOD KUMAR","holder":"PRAMOD KUMAR","lg":51.83,"lt":14.5,"ln":37.33,"ug":52.18,"ut":14.5,"un":37.68,"sh":0.0,"rate":1200.0,"fr":44796.0,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":27500.0,"pump":"DURGA FILLING","od":6000.0,"dtw":"shallow loading","tds":447.96,"td":43947.96,"net":848.04,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1184","rcv":"2026-09-20","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":70,"ws":"235473","cd":"2026-09-10","ud":"2026-09-11","tp":"INFRAHAUL01/561","truck":"UP61AT3357","permit":"INFRAHAUL01","pass_":"561","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":64.0,"lt":15.04,"ln":48.96,"ug":66.1,"ut":15.5,"un":50.6,"sh":0.0,"rate":1260.0,"fr":61689.6,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":20001.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":616.9,"td":30617.9,"net":31071.7,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1134","rcv":"2026-09-12","pay":"2026-09-12","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":71,"ws":"235619","cd":"2026-09-10","ud":"2026-09-12","tp":"INFRAHAUL01/570","truck":"UP65LT4131","permit":"INFRAHAUL01","pass_":"570","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":65.81,"lt":17.3,"ln":48.51,"ug":65.04,"ut":16.5,"un":48.54,"sh":0.0,"rate":1260.0,"fr":61122.6,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":25719.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":611.23,"td":33330.23,"net":27792.37,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1134","rcv":"2026-09-12","pay":"2026-09-12","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":72,"ws":"235620","cd":"2026-09-10","ud":"2026-09-12","tp":"INFRAHAUL01/571","truck":"UP65MT4131","permit":"INFRAHAUL01","pass_":"571","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":60.67,"lt":17.0,"ln":43.67,"ug":64.03,"ut":16.9,"un":47.13,"sh":0.0,"rate":1260.0,"fr":55024.2,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":24153.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":550.24,"td":31703.24,"net":23320.96,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1134","rcv":"2026-09-12","pay":"2026-09-12","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":73,"ws":"1609","cd":"2026-09-10","ud":"2026-09-12","tp":"ITV0001/1406","truck":"UP64BT6911","permit":"ITV0001","pass_":"1406","broker":"AL ANSAR","owner":"AASHIRVAD TRANSPORT","holder":"AL ANSAR ENTERPRISES","lg":51.72,"lt":0.0,"ln":51.72,"ug":69.08,"ut":17.36,"un":51.72,"sh":0.0,"rate":770.0,"fr":39824.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":13815.0,"pump":"VINAYAK FUELS HINDUAARI","od":0.0,"dtw":null,"tds":398.24,"td":14213.24,"net":25611.16,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1138","rcv":"2026-09-13","pay":"2026-09-14","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":74,"ws":"26722","cd":"2026-09-11","ud":"2026-09-13","tp":"AWPL0001/1205","truck":"BR45GB4320","permit":"AWPL0001","pass_":"1205","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":53.9,"lt":16.17,"ln":37.73,"ug":53.9,"ut":16.17,"un":37.73,"sh":0.0,"rate":1320.0,"fr":49803.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":22569.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":498.04,"td":23567.04,"net":26236.56,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1148","rcv":"2026-09-16","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":75,"ws":"26726","cd":"2026-09-11","ud":"2026-09-13","tp":"AWPL0001/1212","truck":"BR45GB1423","permit":"AWPL0001","pass_":"1212","broker":"FOUJI ROADLINE","owner":"AMBEY TRANSPORT","holder":"FAUZI ROADLINES","lg":60.45,"lt":16.94,"ln":43.51,"ug":58.0,"ut":15.0,"un":43.0,"sh":0.51,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":27589.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":567.6,"td":28656.6,"net":28103.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1148","rcv":"2026-09-16","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":76,"ws":"26739","cd":"2026-09-11","ud":"2026-09-13","tp":"AWPL0001/1216","truck":"BR45GB4131","permit":"AWPL0001","pass_":"1216","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":59.645,"lt":16.62,"ln":43.025,"ug":59.0,"ut":16.0,"un":43.0,"sh":0.025,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":28743.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":567.6,"td":29810.6,"net":26949.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1149","rcv":"2026-09-16","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":77,"ws":"26741","cd":"2026-09-11","ud":"2026-09-13","tp":"AWPL0001/1222","truck":"BR24GD7421","permit":"AWPL0001","pass_":"1222","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":59.835,"lt":16.01,"ln":43.825,"ug":59.0,"ut":16.0,"un":43.0,"sh":0.825,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":26436.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":567.6,"td":27503.6,"net":29256.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1149","rcv":"2026-09-16","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":78,"ws":"235674","cd":"2026-09-11","ud":"2026-09-11","tp":"INFRAHAUL01/579","truck":"UP62DT2445","permit":"INFRAHAUL01","pass_":"579","broker":"SELF","owner":"GAURAV PRATAP YADAV","holder":"GAURAV PRATAP YADAV","lg":79.0,"lt":16.2,"ln":62.8,"ug":82.2,"ut":16.5,"un":65.7,"sh":0.0,"rate":1250.0,"fr":78500.0,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":28000.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":785.0,"td":38785.0,"net":39715.0,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1136","rcv":"2026-09-13","pay":"2026-09-14","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":79,"ws":"235759","cd":"2026-09-11","ud":"2026-09-12","tp":"INFRAHAUL01/585","truck":"UP61AT0327","permit":"INFRAHAUL01","pass_":"585","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":63.78,"lt":14.35,"ln":49.43,"ug":64.47,"ut":14.8,"un":49.67,"sh":0.0,"rate":1260.0,"fr":62281.8,"ca":15000.0,"ba":0.0,"hsdl":0.0,"hsda":21301.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":622.82,"td":36923.82,"net":25357.98,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1156","rcv":"2026-09-16","pay":"2026-09-18","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":80,"ws":null,"cd":"2026-09-11","ud":"2026-09-12","tp":"ITV0001/1421","truck":"UP65LT7779","permit":"ITV0001","pass_":"1421","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":65.58,"lt":17.46,"ln":48.12,"ug":65.58,"ut":17.46,"un":48.12,"sh":0.0,"rate":770.0,"fr":37052.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":20000.0,"pump":"VINAYAK FUELS HINDUAARI","od":0.0,"dtw":null,"tds":370.52,"td":20370.52,"net":16681.88,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1154","rcv":"2026-09-16","pay":"2026-09-19","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":81,"ws":null,"cd":"2026-09-11","ud":"2026-09-12","tp":"ITV0002/531","truck":"UP64BT4431","permit":"ITV0002","pass_":"531","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":72.24,"lt":16.98,"ln":55.26,"ug":72.24,"ut":16.98,"un":55.26,"sh":0.0,"rate":805.0,"fr":44484.3,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":23911.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":444.84,"td":31355.84,"net":13128.46,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1141","rcv":"2026-09-14","pay":"2026-09-18","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":82,"ws":"43339","cd":"2026-09-11","ud":"2026-09-12","tp":"ITV0002/547","truck":"UP63BT2389","permit":"ITV0002","pass_":"547","broker":"VISHAL YADAV","owner":"VISHAL YADAV","holder":"VISHAL YADAV","lg":75.84,"lt":17.28,"ln":58.56,"ug":75.84,"ut":17.28,"un":58.56,"sh":0.0,"rate":800.0,"fr":46848.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":24501.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":468.48,"td":24969.48,"net":21878.52,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1139","rcv":"2026-09-13","pay":"2026-09-14","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":83,"ws":"235904","cd":"2026-09-12","ud":"2026-09-13","tp":"INFRAHAUL01/903","truck":"UP62AT7878","permit":"INFRAHAUL01","pass_":"903","broker":"FOUJI ROADLINE","owner":"GANGA SAGAR TRANSPORT SERVICE","holder":"FAUZI ROADLINES","lg":64.0,"lt":15.2,"ln":48.8,"ug":65.76,"ut":15.2,"un":50.56,"sh":0.0,"rate":1260.0,"fr":61488.0,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":17316.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":614.88,"td":27930.88,"net":33557.12,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1157","rcv":"2026-09-16","pay":"2026-09-18","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":84,"ws":"235908","cd":"2026-09-12","ud":"2026-09-13","tp":"INFRAHAUL01/905","truck":"UP65KT7500","permit":"INFRAHAUL01","pass_":"905","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":63.17,"lt":16.77,"ln":46.4,"ug":64.14,"ut":16.0,"un":48.14,"sh":0.0,"rate":1260.0,"fr":58464.0,"ca":7500.0,"ba":0.0,"hsdl":0.0,"hsda":26664.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":584.64,"td":34748.64,"net":23715.36,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1156","rcv":"2026-09-16","pay":"2026-09-18","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":85,"ws":"236002","cd":"2026-09-12","ud":"2026-09-13","tp":"INFRAHAUL01/910","truck":"BR24GD1018","permit":"INFRAHAUL01","pass_":"910","broker":"VIPENDRA PRATAP SINGH","owner":"VIKAS SINGH","holder":"VIPENDRA PRATAP SINGH","lg":57.31,"lt":16.37,"ln":40.94,"ug":58.48,"ut":15.9,"un":42.58,"sh":0.0,"rate":1250.0,"fr":51175.0,"ca":5000.0,"ba":0.0,"hsdl":0.0,"hsda":25000.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":511.75,"td":30511.75,"net":20663.25,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1137","rcv":"2026-09-13","pay":"2026-09-14","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":86,"ws":null,"cd":"2026-09-12","ud":"2026-09-13","tp":"ITV0002/582","truck":"UP63BT4543","permit":"ITV0002","pass_":"582","broker":"VISHAL YADAV","owner":"RAMESH KUMAR","holder":"VISHAL YADAV","lg":72.06,"lt":17.22,"ln":54.84,"ug":72.06,"ut":17.22,"un":54.84,"sh":0.0,"rate":800.0,"fr":43872.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":29013.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":438.72,"td":29451.72,"net":14420.28,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1140","rcv":"2026-09-14","pay":"2026-09-14","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":87,"ws":null,"cd":"2026-09-12","ud":"2026-09-13","tp":"ITV0002/592","truck":"UP63BT4558","permit":"ITV0002","pass_":"592","broker":"VISHAL YADAV","owner":"VISHAL YADAV","holder":"VISHAL YADAV","lg":72.42,"lt":17.92,"ln":54.5,"ug":72.42,"ut":17.92,"un":54.5,"sh":0.0,"rate":800.0,"fr":43600.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":29013.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":436.0,"td":29449.0,"net":14151.0,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1140","rcv":"2026-09-14","pay":"2026-09-14","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":88,"ws":null,"cd":"2026-09-12","ud":"2026-09-13","tp":"ITV0002/595","truck":"UP65LT7486","permit":"ITV0002","pass_":"595","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":75.36,"lt":17.78,"ln":57.58,"ug":75.36,"ut":17.78,"un":57.58,"sh":0.0,"rate":805.0,"fr":46351.9,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":23480.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":463.52,"td":30943.52,"net":15408.38,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1141","rcv":"2026-09-14","pay":"2026-09-18","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":89,"ws":"26816","cd":"2026-09-13","ud":"2026-09-14","tp":"AWPL0001/1255","truck":"BR24GD0478","permit":"AWPL0001","pass_":"1255","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":60.01,"lt":16.015,"ln":43.995,"ug":59.0,"ut":16.0,"un":43.0,"sh":0.995,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":27283.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":567.6,"td":28350.6,"net":28409.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1150","rcv":"2026-09-16","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":90,"ws":"26813","cd":"2026-09-13","ud":"2026-09-14","tp":"AWPL0001/1262","truck":"BR24GD0958","permit":"AWPL0001","pass_":"1262","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":56.07,"lt":15.61,"ln":40.46,"ug":56.07,"ut":15.61,"un":40.46,"sh":0.0,"rate":1320.0,"fr":53407.2,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":22014.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":534.07,"td":23048.07,"net":30359.13,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1150","rcv":"2026-09-16","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":91,"ws":"26821","cd":"2026-09-13","ud":"2026-09-14","tp":"AWPL0001/1266","truck":"UP62AT3377","permit":"AWPL0001","pass_":"1266","broker":"UDAY PRATAP YADAV","owner":"UDAY PRATAP YADAV","holder":"UDAY PRATAP YADAV","lg":43.48,"lt":13.875,"ln":29.605,"ug":43.48,"ut":13.875,"un":29.605,"sh":0.0,"rate":1300.0,"fr":38486.5,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":15000.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":384.86,"td":15884.86,"net":22601.64,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1143","rcv":"2026-09-15","pay":"2026-09-15","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":92,"ws":"26863","cd":"2026-09-13","ud":"2026-09-15","tp":"AWPL0001/1277","truck":"UP63BT2953","permit":"AWPL0001","pass_":"1277","broker":"FOUJI ROADLINE","owner":"FAUZI ROADLINES","holder":"FAUZI ROADLINES","lg":56.72,"lt":15.94,"ln":40.78,"ug":56.72,"ut":15.94,"un":40.78,"sh":0.0,"rate":1320.0,"fr":53829.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":34645.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":538.3,"td":35683.3,"net":18146.3,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1152","rcv":"2026-09-16","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":93,"ws":null,"cd":"2026-09-13","ud":"2026-09-14","tp":"AWPL0001/1287","truck":"BR24GD0959","permit":"AWPL0001","pass_":"1287","broker":"FOUJI ROADLINE","owner":"FAUZI ROADLINES","holder":"FAUZI ROADLINES","lg":36.195,"lt":0.0,"ln":36.195,"ug":51.85,"ut":15.655,"un":36.195,"sh":0.0,"rate":1320.0,"fr":47777.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":500.0,"dtw":"UN CHARGES","tds":477.77,"td":977.77,"net":46799.63,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1162","rcv":"2026-09-17","pay":null,"bank":null,"cc":"VARANASI","vt":"Union","st":"Received"},{"id":94,"ws":null,"cd":"2026-09-13","ud":"2026-09-15","tp":"AWPL0001/1294","truck":"BR24GD4921","permit":"AWPL0001","pass_":"1294","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":42.795,"lt":0.0,"ln":42.795,"ug":58.995,"ut":16.2,"un":42.795,"sh":0.0,"rate":1320.0,"fr":56489.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":23101.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":564.89,"td":24165.89,"net":32323.51,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1162","rcv":"2026-09-17","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":95,"ws":"26872","cd":"2026-09-13","ud":"2026-09-15","tp":"AWPL0001/1295","truck":"BR24GD5369","permit":"AWPL0001","pass_":"1295","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":42.285,"lt":0.0,"ln":42.285,"ug":58.255,"ut":15.97,"un":42.285,"sh":0.0,"rate":1320.0,"fr":55816.2,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":25811.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":558.16,"td":26869.16,"net":28947.04,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1165","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":96,"ws":"26867","cd":"2026-09-13","ud":"2026-09-15","tp":"AWPL0001/1296","truck":"BR24GD0725","permit":"AWPL0001","pass_":"1296","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":42.115,"lt":0.0,"ln":42.115,"ug":57.935,"ut":15.82,"un":42.115,"sh":0.0,"rate":1320.0,"fr":55591.8,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":28649.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":555.92,"td":29704.92,"net":25886.88,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1165","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":97,"ws":"26942","cd":"2026-09-13","ud":"2026-09-15","tp":"AWPL0001/1329","truck":"BR45GB4321","permit":"AWPL0001","pass_":"1329","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":38.34,"lt":0.0,"ln":38.34,"ug":54.61,"ut":16.27,"un":38.34,"sh":0.0,"rate":1320.0,"fr":50608.8,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":500.0,"dtw":"UN CHARGES","tds":506.09,"td":1006.09,"net":49602.71,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1167","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":98,"ws":"236183","cd":"2026-09-13","ud":"2026-09-14","tp":"INFRAHAUL01/933","truck":"UP61AT3357","permit":"INFRAHAUL01","pass_":"933","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":64.0,"lt":14.99,"ln":49.01,"ug":65.7,"ut":15.2,"un":50.5,"sh":0.0,"rate":1260.0,"fr":61752.6,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":20500.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":617.53,"td":31117.53,"net":30635.07,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1157","rcv":"2026-09-16","pay":"2026-09-18","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":99,"ws":"236319","cd":"2026-09-13","ud":"2026-09-15","tp":"INFRAHAUL01/943","truck":"UP65MT4131","permit":"INFRAHAUL01","pass_":"943","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":65.8,"lt":17.1,"ln":48.7,"ug":65.86,"ut":16.9,"un":48.96,"sh":0.0,"rate":1260.0,"fr":61362.0,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":27580.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":613.62,"td":35193.62,"net":26168.38,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1158","rcv":"2026-09-16","pay":"2026-09-18","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":100,"ws":"236321","cd":"2026-09-13","ud":"2026-09-15","tp":"INFRAHAUL01/944","truck":"UP65LT4131","permit":"INFRAHAUL01","pass_":"944","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":62.8,"lt":17.1,"ln":45.7,"ug":64.14,"ut":16.9,"un":47.24,"sh":0.0,"rate":1260.0,"fr":57582.0,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":27001.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":575.82,"td":34576.82,"net":23005.18,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1158","rcv":"2026-09-16","pay":"2026-09-18","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":101,"ws":null,"cd":"2026-09-13","ud":"2026-09-15","tp":"ITV0001/1463","truck":"UP64BT6911","permit":"ITV0001","pass_":"1463","broker":"AL ANSAR","owner":"AASHIRVAD TRANSPORT","holder":"AL ANSAR ENTERPRISES","lg":63.5,"lt":17.16,"ln":46.34,"ug":63.5,"ut":17.16,"un":46.34,"sh":0.0,"rate":770.0,"fr":35681.8,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":20663.0,"pump":"VINAYAK FUELS HINDUAARI","od":0.0,"dtw":null,"tds":356.82,"td":21019.82,"net":14661.98,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1155","rcv":"2026-09-16","pay":"2026-09-17","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":102,"ws":null,"cd":"2026-09-13","ud":"2026-09-15","tp":"ITV0001/1464","truck":"UP65LT7779","permit":"ITV0001","pass_":"1464","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":75.04,"lt":17.12,"ln":57.92,"ug":75.04,"ut":17.12,"un":57.92,"sh":0.0,"rate":770.0,"fr":44598.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":0.0,"dtw":null,"tds":445.98,"td":445.98,"net":44152.42,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1166","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":103,"ws":null,"cd":"2026-09-13","ud":"2026-09-13","tp":"ITV0002/711","truck":"UP67T7898","permit":"ITV0002","pass_":"711","broker":"RIDDHI VENTURES","owner":"SHARAN KUMAR","holder":"RIDDHI VENTURES","lg":59.88,"lt":0.0,"ln":59.88,"ug":72.54,"ut":12.66,"un":59.88,"sh":0.0,"rate":800.0,"fr":47904.0,"ca":5000.0,"ba":0.0,"hsdl":0.0,"hsda":23811.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":479.04,"td":29290.04,"net":18613.96,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1151","rcv":"2026-09-16","pay":"2026-09-16","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":104,"ws":"27003","cd":"2026-09-14","ud":"2026-09-16","tp":"AWPL0001/1359","truck":"BR45GB4319","permit":"AWPL0001","pass_":"1359","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":41.63,"lt":0.0,"ln":41.63,"ug":57.925,"ut":16.295,"un":41.63,"sh":0.0,"rate":1320.0,"fr":54951.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":23263.0,"pump":"AWPL","od":500.0,"dtw":"un charges","tds":549.52,"td":24312.52,"net":30639.08,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1167","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":105,"ws":"27005","cd":"2026-09-14","ud":"2026-09-16","tp":"AWPL0001/1360","truck":"BR45GB4322","permit":"AWPL0001","pass_":"1360","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":41.32,"lt":0.0,"ln":41.32,"ug":57.58,"ut":16.26,"un":41.32,"sh":0.0,"rate":1320.0,"fr":54542.4,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":26501.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":545.42,"td":27546.42,"net":26995.98,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1174","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":106,"ws":"27038","cd":"2026-09-14","ud":"2026-09-16","tp":"AWPL0001/1374","truck":"BR45GB4320","permit":"AWPL0001","pass_":"1374","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":41.475,"lt":0.0,"ln":41.475,"ug":57.55,"ut":16.075,"un":41.475,"sh":0.0,"rate":1320.0,"fr":54747.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":22230.0,"pump":"AWPL","od":500.0,"dtw":null,"tds":547.47,"td":23277.47,"net":31469.53,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1174","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":107,"ws":"27074","cd":"2026-09-14","ud":"2026-09-16","tp":"AWPL0001/1386","truck":"BR24GD5370","permit":"AWPL0001","pass_":"1386","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":42.11,"lt":0.0,"ln":42.11,"ug":58.08,"ut":15.97,"un":42.11,"sh":0.0,"rate":1320.0,"fr":55585.2,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":29800.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":555.85,"td":30855.85,"net":24729.35,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1175","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":108,"ws":"27035","cd":"2026-09-14","ud":"2026-09-16","tp":"AWPL0001/1398","truck":"BR45GB1423","permit":"AWPL0001","pass_":"1398","broker":"FOUJI ROADLINE","owner":"FAUZI ROADLINES","holder":"FAUZI ROADLINES","lg":39.88,"lt":0.0,"ln":39.88,"ug":56.64,"ut":16.76,"un":39.88,"sh":0.0,"rate":1320.0,"fr":52641.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":27100.0,"pump":"DURGA FILLING","od":500.0,"dtw":"un charges","tds":526.42,"td":28126.42,"net":24515.18,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1168","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":109,"ws":"236566","cd":"2026-09-14","ud":"2026-09-16","tp":"INFRAHAUL01/969","truck":"BR24GD1018","permit":"INFRAHAUL01","pass_":"969","broker":"VIPENDRA PRATAP SINGH","owner":"VIKAS SINGH","holder":"VIPENDRA PRATAP SINGH","lg":60.77,"lt":16.49,"ln":44.28,"ug":61.28,"ut":16.4,"un":44.88,"sh":0.0,"rate":1250.0,"fr":55350.0,"ca":5000.0,"ba":0.0,"hsdl":0.0,"hsda":25000.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":553.5,"td":30553.5,"net":24796.5,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1159","rcv":"2026-09-16","pay":"2026-09-17","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":110,"ws":"2365688/735","cd":"2026-09-14","ud":"2026-09-17","tp":"INFRAHAUL01/970","truck":"UP61AT0327","permit":"INFRAHAUL01","pass_":"970","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":64.0,"lt":14.48,"ln":49.52,"ug":65.5,"ut":14.2,"un":51.3,"sh":0.0,"rate":1260.0,"fr":62395.2,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":20701.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":623.95,"td":31324.95,"net":31070.25,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1170","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":111,"ws":null,"cd":"2026-09-14","ud":"2026-09-16","tp":"ITV0002/821","truck":"UP64CT0578","permit":"ITV0002","pass_":"821","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":71.6,"lt":18.66,"ln":52.94,"ug":71.6,"ut":18.66,"un":52.94,"sh":0.0,"rate":805.0,"fr":42616.7,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":24316.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":426.17,"td":31742.17,"net":10874.53,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1160","rcv":"2026-09-16","pay":"2026-09-17","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":112,"ws":null,"cd":"2026-09-14","ud":"2026-09-17","tp":"ITV0002/823","truck":"UP65MT2101","permit":"ITV0002","pass_":"823","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":59.98,"lt":0.0,"ln":59.98,"ug":76.58,"ut":16.6,"un":59.98,"sh":0.0,"rate":805.0,"fr":48283.9,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":36144.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":482.84,"td":43626.84,"net":4657.06,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1173","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":113,"ws":"27027","cd":"2026-09-15","ud":"2026-09-16","tp":"AWPL0001/1410","truck":"BR45GB4131","permit":"AWPL0001","pass_":"1410","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":45.555,"lt":0.0,"ln":45.555,"ug":58.0,"ut":15.0,"un":43.0,"sh":2.555,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":27974.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":567.6,"td":29041.6,"net":27718.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1175","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":114,"ws":"27158","cd":"2026-09-15","ud":"2026-09-18","tp":"AWPL0001/1427","truck":"BR24GD7421","permit":"AWPL0001","pass_":"1427","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":43.0,"lt":0.0,"ln":43.0,"ug":59.0,"ut":16.0,"un":43.0,"sh":0.0,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":26771.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":567.6,"td":27838.6,"net":28921.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1177","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":115,"ws":"27095","cd":"2026-09-15","ud":"2026-09-17","tp":"AWPL0001/1442","truck":"BR24GD1207","permit":"AWPL0001","pass_":"1442","broker":"FOUJI ROADLINE","owner":"FAUZI ROADLINES","holder":"FAUZI ROADLINES","lg":44.04,"lt":0.0,"ln":44.04,"ug":58.0,"ut":15.0,"un":43.0,"sh":1.04,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":500.0,"dtw":"UN CHARGES","tds":567.6,"td":1067.6,"net":55692.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1176","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":116,"ws":"27134","cd":"2026-09-15","ud":"2026-09-18","tp":"AWPL0001/1468","truck":"BR24GD0958","permit":"AWPL0001","pass_":"1468","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":39.915,"lt":0.0,"ln":39.915,"ug":55.525,"ut":15.61,"un":39.915,"sh":0.0,"rate":1320.0,"fr":52687.8,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":28115.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":526.88,"td":29141.88,"net":23545.92,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1177","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":117,"ws":"27141","cd":"2026-09-15","ud":"2026-09-18","tp":"AWPL0001/1477","truck":"BR24GD0959","permit":"AWPL0001","pass_":"1477","broker":"FOUJI ROADLINE","owner":"FAUZI ROADLINES","holder":"FAUZI ROADLINES","lg":38.385,"lt":0.0,"ln":38.385,"ug":54.065,"ut":15.68,"un":38.385,"sh":0.0,"rate":1320.0,"fr":50668.2,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":28001.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":506.68,"td":29007.68,"net":21660.52,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1178","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":118,"ws":"27172","cd":"2026-09-15","ud":"2026-09-19","tp":"AWPL0001/1486","truck":"BR24GD4921","permit":"AWPL0001","pass_":"1486","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":41.585,"lt":0.0,"ln":41.585,"ug":57.64,"ut":16.055,"un":41.585,"sh":0.0,"rate":1320.0,"fr":54892.2,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":27974.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":548.92,"td":29022.92,"net":25869.28,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1178","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":119,"ws":"27160","cd":"2026-09-15","ud":"2026-09-18","tp":"AWPL0001/1490","truck":"BR24GD0478","permit":"AWPL0001","pass_":"1490","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":42.08,"lt":0.0,"ln":42.08,"ug":57.925,"ut":15.845,"un":42.08,"sh":0.0,"rate":1320.0,"fr":55545.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":27397.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":555.46,"td":28452.46,"net":27093.14,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1178","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":120,"ws":"236696","cd":"2026-09-15","ud":"2026-09-17","tp":"INFRAHAUL01/983","truck":"UP62AT7878","permit":"INFRAHAUL01","pass_":"983","broker":"FOUJI ROADLINE","owner":"GANGA SAGAR TRANSPORT SERVICE","holder":"FAUZI ROADLINES","lg":64.0,"lt":14.98,"ln":49.02,"ug":64.33,"ut":14.8,"un":49.53,"sh":0.0,"rate":1260.0,"fr":61765.2,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":16413.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":617.65,"td":27030.65,"net":34734.55,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1170","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":121,"ws":null,"cd":"2026-09-15","ud":"2026-09-16","tp":"ITV0002/852","truck":"UP63BT4543","permit":"ITV0002","pass_":"852","broker":"VISHAL YADAV","owner":"RAMESH KUMAR","holder":"VISHAL YADAV","lg":75.1,"lt":17.66,"ln":57.44,"ug":75.1,"ut":17.66,"un":57.44,"sh":0.0,"rate":800.0,"fr":45952.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":29013.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":459.52,"td":29472.52,"net":16479.48,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1161","rcv":"2026-09-17","pay":"2026-09-17","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":122,"ws":null,"cd":"2026-09-15","ud":"2026-09-16","tp":"ITV0002/853","truck":"UP63BT4558","permit":"ITV0002","pass_":"853","broker":"VISHAL YADAV","owner":"VISHAL YADAV","holder":"VISHAL YADAV","lg":72.52,"lt":17.84,"ln":54.68,"ug":72.52,"ut":17.84,"un":54.68,"sh":0.0,"rate":800.0,"fr":43744.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":24001.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":437.44,"td":24438.44,"net":19305.56,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1161","rcv":"2026-09-17","pay":"2026-09-17","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":123,"ws":null,"cd":"2026-09-15","ud":"2026-09-16","tp":"ITV0002/858","truck":"UP63BT2389","permit":"ITV0002","pass_":"858","broker":"VISHAL YADAV","owner":"VISHAL YADAV","holder":"VISHAL YADAV","lg":79.38,"lt":17.72,"ln":61.66,"ug":79.38,"ut":17.72,"un":61.66,"sh":0.0,"rate":800.0,"fr":49328.0,"ca":4000.0,"ba":0.0,"hsdl":0.0,"hsda":31232.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":493.28,"td":35725.28,"net":13602.72,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1161","rcv":"2026-09-17","pay":"2026-09-17","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":124,"ws":"27171","cd":"2026-09-16","ud":"2026-09-19","tp":"AWPL0001/1492","truck":"BR24GD5369","permit":"AWPL0001","pass_":"1492","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":43.0,"lt":0.0,"ln":43.0,"ug":59.0,"ut":16.0,"un":43.0,"sh":0.0,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":19803.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":567.6,"td":20870.6,"net":35889.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1179","rcv":"2026-09-20","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":125,"ws":"27170","cd":"2026-09-16","ud":"2026-09-19","tp":"AWPL0001/1493","truck":"BR24GD0725","permit":"AWPL0001","pass_":"1493","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":42.63,"lt":0.0,"ln":42.63,"ug":58.4,"ut":15.77,"un":42.63,"sh":0.0,"rate":1320.0,"fr":56271.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":22184.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":562.72,"td":23246.72,"net":33024.88,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1179","rcv":"2026-09-20","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":126,"ws":"27159","cd":"2026-09-16","ud":"2026-09-19","tp":"AWPL0001/1512","truck":"BR24GD2719","permit":"AWPL0001","pass_":"1512","broker":"FOUJI ROADLINE","owner":"GANGA SAGAR TRANSPORT SERVICE","holder":"FAUZI ROADLINES","lg":42.415,"lt":0.0,"ln":42.415,"ug":58.95,"ut":16.535,"un":42.415,"sh":0.0,"rate":1320.0,"fr":55987.8,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":0.0,"pump":null,"od":500.0,"dtw":"UN CHARGES","tds":559.88,"td":1059.88,"net":54927.92,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1179","rcv":"2026-09-20","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":127,"ws":"236806/2354","cd":"2026-09-16","ud":"2026-09-17","tp":"INFRAHAUL01/997","truck":"UP65KT7500","permit":"INFRAHAUL01","pass_":"997","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":62.59,"lt":16.8,"ln":45.79,"ug":63.63,"ut":16.2,"un":47.43,"sh":0.0,"rate":1260.0,"fr":57695.4,"ca":7500.0,"ba":0.0,"hsdl":0.0,"hsda":27021.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":576.95,"td":35097.95,"net":22597.45,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1171","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":128,"ws":"236952/2380","cd":"2026-09-16","ud":"2026-09-18","tp":"INFRAHAUL01/1002","truck":"UP65LT4131","permit":"INFRAHAUL01","pass_":"1002","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":69.0,"lt":17.21,"ln":51.79,"ug":69.72,"ut":17.1,"un":52.62,"sh":0.0,"rate":1260.0,"fr":65255.4,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":25691.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":652.55,"td":33343.55,"net":31911.85,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1171","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":129,"ws":"236953/2381","cd":"2026-09-16","ud":"2026-09-18","tp":"INFRAHAUL01/1003","truck":"UP65MT4131","permit":"INFRAHAUL01","pass_":"1003","broker":"FOUJI ROADLINE","owner":"FOUJI TRANSPORT","holder":"FAUZI ROADLINES","lg":63.38,"lt":17.23,"ln":46.15,"ug":64.2,"ut":16.8,"un":47.4,"sh":0.0,"rate":1260.0,"fr":58149.0,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":25871.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":581.49,"td":33452.49,"net":24696.51,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1171","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":130,"ws":null,"cd":"2026-09-16","ud":"2026-09-17","tp":"ITV0001/1501","truck":"UP64BT4431","permit":"ITV0001","pass_":"1501","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":48.78,"lt":0.0,"ln":48.78,"ug":65.84,"ut":17.06,"un":48.78,"sh":0.0,"rate":770.0,"fr":37560.6,"ca":5000.0,"ba":0.0,"hsdl":0.0,"hsda":20257.0,"pump":"VINAYAK FUELS HINDUAARI","od":0.0,"dtw":null,"tds":375.61,"td":25632.61,"net":11927.99,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1163","rcv":"2026-09-18","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":131,"ws":null,"cd":"2026-09-16","ud":"2026-09-17","tp":"ITV0001/1502","truck":"UP64BT6911","permit":"ITV0001","pass_":"1502","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":68.36,"lt":16.84,"ln":51.52,"ug":68.36,"ut":16.84,"un":51.52,"sh":0.0,"rate":770.0,"fr":39670.4,"ca":5000.0,"ba":0.0,"hsdl":0.0,"hsda":15001.0,"pump":"VINAYAK FUELS HINDUAARI","od":0.0,"dtw":null,"tds":396.7,"td":20397.7,"net":19272.7,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1163","rcv":"2026-09-18","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":132,"ws":"2465","cd":"2026-09-17","ud":"2026-09-17","tp":"INFRAHAUL01/1022","truck":"UP62DT4451","permit":"INFRAHAUL01","pass_":"1022","broker":"GAYATRI YADAV","owner":"GAYATRI YADAV","holder":"GAYATRI YADAV","lg":56.21,"lt":0.0,"ln":56.21,"ug":74.01,"ut":17.8,"un":56.21,"sh":0.0,"rate":1250.0,"fr":70262.5,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":34001.0,"pump":"INFRA BP","od":6000.0,"dtw":null,"tds":702.62,"td":50703.62,"net":19558.88,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1169","rcv":"2026-09-19","pay":"2026-09-19","bank":"ICICI BANK","cc":"VARANASI","vt":"Non-Union","st":"Already Paid"},{"id":133,"ws":null,"cd":"2026-09-17","ud":"2026-09-17","tp":"ITV0002/986","truck":"UP64CT0578","permit":"ITV0002","pass_":"986","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":61.14,"lt":0.0,"ln":61.14,"ug":78.4,"ut":17.26,"un":61.14,"sh":0.0,"rate":805.0,"fr":49217.7,"ca":7000.0,"ba":0.0,"hsdl":0.0,"hsda":22000.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":492.18,"td":29492.18,"net":19725.52,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1173","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":134,"ws":"27342","cd":"2026-09-18","ud":"2026-09-20","tp":"AWPL0001/1595","truck":"BR45GB1423","permit":"AWPL0001","pass_":"1595","broker":"FOUJI ROADLINE","owner":"FAUZI ROADLINES","holder":"FAUZI ROADLINES","lg":43.0,"lt":0.0,"ln":43.0,"ug":59.0,"ut":16.0,"un":43.0,"sh":0.0,"rate":1320.0,"fr":56760.0,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":29416.0,"pump":"AWPL","od":500.0,"dtw":"UN CHARGES","tds":567.6,"td":30483.6,"net":26276.4,"cons":"JIPL","party":"ANANNT WAGONS PVT LTD","lp":"NTPC KHADIA (UP)","up":"BARHALGANJ","ref":"1181","rcv":"2026-09-20","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":135,"ws":null,"cd":"2026-09-18","ud":"2026-09-19","tp":"ITV0001/1524","truck":"UP64BT6911","permit":"ITV0001","pass_":"1524","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":53.48,"lt":0.0,"ln":53.48,"ug":70.2,"ut":16.72,"un":53.48,"sh":0.0,"rate":770.0,"fr":41179.6,"ca":5000.0,"ba":0.0,"hsdl":0.0,"hsda":19500.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":411.8,"td":24911.8,"net":16267.8,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1172","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":136,"ws":null,"cd":"2026-09-18","ud":"2026-09-19","tp":"ITV0001/1530","truck":"UP64BT4431","permit":"ITV0001","pass_":"1530","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":54.96,"lt":0.0,"ln":54.96,"ug":72.14,"ut":17.18,"un":54.96,"sh":0.0,"rate":770.0,"fr":42319.2,"ca":5000.0,"ba":0.0,"hsdl":0.0,"hsda":19200.0,"pump":"DURGA FILLING","od":0.0,"dtw":null,"tds":423.19,"td":24623.19,"net":17696.01,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC KHADIA (UP)","up":"CHANDAULI (UP)","ref":"1172","rcv":"2026-09-19","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":137,"ws":"237408","cd":"2026-09-19","ud":"2026-09-20","tp":"INFRAHAUL01/1043","truck":"UP62CT8180","permit":"INFRAHAUL01","pass_":"1043","broker":"PRAMOD KUMAR","owner":"PRAMOD KUMAR","holder":"PRAMOD KUMAR","lg":54.98,"lt":14.34,"ln":40.64,"ug":55.3,"ut":14.34,"un":40.96,"sh":0.0,"rate":1250.0,"fr":50800.0,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":27001.0,"pump":"INFRA BP","od":0.0,"dtw":null,"tds":508.0,"td":37509.0,"net":13291.0,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1184","rcv":"2026-09-20","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":138,"ws":"237409/2572","cd":"2026-09-19","ud":"2026-09-20","tp":"INFRAHAUL01/1044","truck":"UP62DT2445","permit":"INFRAHAUL01","pass_":"1044","broker":"GAURAV PRATAP YADAV","owner":"GAURAV PRATAP YADAV","holder":"GAURAV PRATAP YADAV","lg":79.0,"lt":16.13,"ln":62.87,"ug":80.02,"ut":16.11,"un":63.91,"sh":0.0,"rate":1250.0,"fr":78587.5,"ca":10000.0,"ba":0.0,"hsdl":0.0,"hsda":26000.0,"pump":"INFRA BP","od":0.0,"dtw":null,"tds":785.88,"td":36785.88,"net":41801.63,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1183","rcv":"2026-09-20","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":139,"ws":"237424/2625","cd":"2026-09-19","ud":"2026-09-20","tp":"INFRAHAUL01/1251","truck":"BR24GD1018","permit":"INFRAHAUL01","pass_":"1251","broker":"VIPENDRA PRATAP SINGH","owner":"VIKAS SINGH","holder":"VIPENDRA PRATAP SINGH","lg":55.13,"lt":16.19,"ln":38.94,"ug":56.43,"ut":16.13,"un":40.3,"sh":0.0,"rate":1250.0,"fr":48675.0,"ca":5000.0,"ba":0.0,"hsdl":0.0,"hsda":26000.0,"pump":"INFRA BP","od":0.0,"dtw":null,"tds":486.75,"td":31486.75,"net":17188.25,"cons":"JNP","party":"INFRA HAUL","lp":"NTPC VINDHYANAGAR,MP","up":"JAUNPUR (UP)","ref":"1182","rcv":"2026-09-20","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"},{"id":140,"ws":null,"cd":"2026-09-19","ud":"2026-09-19","tp":"ITV0002/1119","truck":"UP64CT0578","permit":"ITV0002","pass_":"1119","broker":"AL ANSAR","owner":"AL ANSAR ENTERPRISES","holder":"AL ANSAR ENTERPRISES","lg":59.12,"lt":0.0,"ln":59.12,"ug":76.32,"ut":17.2,"un":59.12,"sh":0.0,"rate":805.0,"fr":47591.6,"ca":0.0,"ba":0.0,"hsdl":0.0,"hsda":21566.0,"pump":"INDO TRADE VENTURES- 02","od":0.0,"dtw":null,"tds":475.92,"td":22041.92,"net":25549.68,"cons":"NKC","party":"INDO TRADE VENTURES","lp":"NTPC RIHAND","up":"CHANDAULI (UP)","ref":"1180","rcv":"2026-09-20","pay":null,"bank":null,"cc":"VARANASI","vt":"Non-Union","st":"Received"}],"meta":{"source":"built-in snapshot","period":"01-Sep-2026 to 21-Sep-2026"}}</script><script id="app">const MODE = "github";
+const HEAD_HTML = "<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n<title>RUDRAKSHA ENTERPRISES DASHBOARD</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap\" rel=\"stylesheet\">";
+document.body.appendChild(document.getElementById('skeleton').content.cloneNode(true));
+const EMBED = JSON.parse(document.getElementById('appData').textContent);
+const FALLBACK = EMBED;
+let PENDING = null;
+const DATA_DIR = 'data/';
+let ROWS = [], TOTAL = 0, PERMITS = [], PCOL = {}, ROUTES = [], TRANSPORTERS = [];
+
+function decorate(r) {
+  const o = Object.assign({}, r);
+  o.pass = r.pass_ || '-'; o.permit = r.permit || 'Unknown'; o.broker = r.broker || 'Unknown'; o.truck = r.truck || '-';
+  o.tp = r.tp || (o.permit + '/' + o.pass);
+  o.route = (r.lp || '?') + ' to ' + (r.up || '?');
+  o.transit = (r.cd && r.ud) ? Math.round((Date.parse(r.ud) - Date.parse(r.cd)) / 864e5) : null;
+  o.hay = [o.tp, o.pass, o.permit, o.truck, o.broker, r.owner, r.holder, r.lp, r.up, r.ws, r.party, r.cons, r.st].join(' ').toLowerCase();
+  return o;
+}
+
+const S = { q:'', tr:'', permit:'', route:'', from:'', to:'', metric:'trips', basis:'cd', tab:'tr', view:'flat',
+            sort:{k:'cd', dir:-1}, closed:new Set() };
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf = (x, d=2) => Number(x).toLocaleString('en-IN', {minimumFractionDigits:d, maximumFractionDigits:d});
+const inr = x => '\u20B9' + Number(x).toLocaleString('en-IN', {maximumFractionDigits:0});
+const dash = x => x ? nf(x) : '-';
+const pl = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+const ni = x => Number(x).toLocaleString('en-IN');
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const dShort = iso => iso ? (+iso.slice(8,10) + ' ' + MON[+iso.slice(5,7)-1]) : '-';
+const dFull = iso => iso ? (+iso.slice(8,10) + ' ' + MON[+iso.slice(5,7)-1] + ' ' + iso.slice(0,4)) : '-';
+const sum = (a, f) => a.reduce((s, x) => s + f(x), 0);
+const stClass = s => s === 'Already Paid' ? 'paid' : s === 'Received' ? 'recv' : 'unl';
+
+function filt(skip) {
+  const toks = S.q.toLowerCase().split(/\s+/).filter(Boolean);
+  return ROWS.filter(r =>
+    toks.every(t => r.hay.includes(t)) &&
+    (skip==='tr' || !S.tr || r.broker===S.tr) &&
+    (skip==='permit' || !S.permit || r.permit===S.permit) &&
+    (skip==='route' || !S.route || r.route===S.route) &&
+    (!S.from || r.cd >= S.from) && (!S.to || r.cd <= S.to));
+}
+const isFiltered = () => !!(S.q || S.tr || S.permit || S.route || S.from || S.to);
+
+/* ---------- KPIs ---------- */
+function renderKpis(rows) {
+  const n = rows.length, mt = sum(rows, r => r.un);
+  const trucks = new Set(rows.map(r => r.truck)).size;
+  const trs = new Set(rows.map(r => r.broker)).size;
+  const permits = new Set(rows.map(r => r.permit)).size;
+  const tp = new Set(rows.map(r => r.tp)).size;
+  const tr = rows.filter(r => r.transit != null);
+  const avgT = tr.length ? sum(tr, r => r.transit) / tr.length : 0;
+  const shr = rows.filter(r => r.sh > 0);
+  const k = [
+    ['Trips', ni(n), '', isFiltered() ? 'of ' + ni(TOTAL) + ' challans' : 'challans in period'],
+    ['UL Net', nf(mt,1), 'MT', n ? 'avg ' + nf(mt/n,1) + ' MT per trip' : ' '],
+    ['Trucks', ni(trucks), '', trucks ? nf(n/trucks,1) + ' trips per truck' : ' '],
+    ['Transporters', ni(trs), '', ' '],
+    ['Permits', ni(permits), '', ni(tp) + ' pass numbers'],
+    ['Avg transit', n ? nf(avgT,1) : '0', 'days', 'challan to unloading'],
+    ['Shortage', nf(sum(rows, r => r.sh),1), 'MT', ni(shr.length) + ' trips with shortage'],
+  ];
+  if (n) {
+    const cnt = {}; rows.forEach(r => cnt[r.broker] = (cnt[r.broker]||0)+1);
+    k[3][3] = 'top: ' + Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0];
+  }
+  $('kpis').innerHTML = k.map(x => `<div class="kpi"><div class="l">${x[0]}</div><div class="v">${x[1]}${x[2] ? '<small>'+x[2]+'</small>' : ''}</div><div class="s" title="${esc(x[3])}">${esc(x[3])}</div></div>`).join('');
+}
+
+function renderInsight(rows) {
+  if (!rows.length) { $('insight').innerHTML = 'No trips match the current search and filters.'; return; }
+  const by = (f) => { const m = {}; rows.forEach(r => m[f(r)] = (m[f(r)]||0)+1); return Object.entries(m).sort((a,b)=>b[1]-a[1]); };
+  const t = by(r => r.broker)[0], p = by(r => r.permit)[0], d = by(r => r.cd)[0];
+  const pct = Math.round(t[1] / rows.length * 100);
+  $('insight').innerHTML = `<b>${esc(t[0])}</b> moved ${pct}% of these trips. <b>${esc(p[0])}</b> is the busiest permit with ${p[1]} trips, and the peak challan day was <b>${dShort(d[0])}</b> with ${d[1]} trips.`;
+}
+
+/* ---------- trend chart ---------- */
+function renderTrend(rows) {
+  const key = S.basis;
+  const all = ROWS.map(r => r[key]).filter(Boolean).sort();
+  const days = [];
+  for (let t = Date.parse(all[0]); t <= Date.parse(all[all.length-1]); t += 864e5) days.push(new Date(t).toISOString().slice(0,10));
+  const agg = {}; days.forEach(d => agg[d] = {n:0, mt:0});
+  rows.forEach(r => { if (agg[r[key]]) { agg[r[key]].n++; agg[r[key]].mt += r.un; } });
+  const val = d => S.metric === 'trips' ? agg[d].n : agg[d].mt;
+  const max = Math.max(1, ...days.map(val));
+  const step = max <= 6 ? 1 : max <= 12 ? 2 : max <= 30 ? 5 : max <= 60 ? 10 : max <= 150 ? 25 : max <= 300 ? 50 : max <= 600 ? 100 : 200;
+  const top = Math.ceil(max / step) * step;
+  const W = 760, H = 320, L = 40, R = 8, T = 18, B = 34;
+  const iw = W - L - R, ih = H - T - B, bw = iw / days.length;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily ${S.metric === 'trips' ? 'trip count' : 'UL Net in MT'} by ${key === 'cd' ? 'challan' : 'unloading'} date">`;
+  for (let v = 0; v <= top; v += step) {
+    const y = T + ih - v / top * ih;
+    s += `<line class="grid-l" x1="${L}" x2="${W-R}" y1="${y}" y2="${y}"/><text x="${L-6}" y="${y+4}" text-anchor="end">${v}</text>`;
+  }
+  const clickable = key === 'cd';
+  days.forEach((d, i) => {
+    const v = val(d), h = v / top * ih, x = L + i * bw, y = T + ih - h;
+    const active = S.from && S.from === S.to && S.from === d;
+    const dim = S.from && S.from === S.to && S.from !== d;
+    const label = S.metric === 'trips' ? v : Math.round(v);
+    s += `<g><title>${dFull(d)}: ${agg[d].n} trips, ${nf(agg[d].mt,1)} MT</title>`;
+    s += `<rect class="hit${clickable ? ' click' : ''}" data-d="${d}" x="${x}" y="${T}" width="${bw}" height="${ih}"/>`;
+    s += `<rect class="bar${dim ? ' dim' : ''}" x="${x + bw*0.16}" y="${y}" width="${bw*0.68}" height="${Math.max(h, v ? 1.5 : 0)}" rx="2" ${active ? 'style="fill:var(--accent)"' : ''} pointer-events="none"/>`;
+    if (v) s += `<text class="val" x="${x + bw/2}" y="${y - 4}" text-anchor="middle">${label}</text>`;
+    s += `<text x="${x + bw/2}" y="${H - B + 14}" text-anchor="middle">${+d.slice(8)}</text></g>`;
+  });
+  const m0 = MON[+days[0].slice(5,7)-1], y0 = days[0].slice(0,4);
+  s += `<text x="${L}" y="${H-4}">${m0} ${y0}</text></svg>`;
+  $('trend').innerHTML = s;
+  $('trendSub').textContent = clickable ? 'Click a day to filter to that challan date' : 'Showing unloading dates. Date filters apply to challan date.';
+}
+
+/* ---------- bar lists ---------- */
+function barList(items, metricFn, active, colorFn, noteFn) {
+  if (!items.length) return '<div class="empty-note">Nothing to show for the current filters.</div>';
+  const mx = Math.max(...items.map(i => metricFn(i)), 1);
+  return items.map(i => `<button type="button" class="brow${active === i.key ? ' on' : ''}" data-k="${esc(i.key)}" aria-pressed="${active === i.key}">
+    <span class="t"><span class="nm" title="${esc(i.key)}">${esc(i.label || i.key)}</span><span class="vv"><b>${i.n}</b><span>${nf(i.mt,1)} MT</span></span></span>
+    <span class="track"><i style="width:${Math.max(2, metricFn(i)/mx*100)}%;${colorFn ? 'background:'+colorFn(i) : ''}"></i></span>
+    ${noteFn ? '<span class="note">'+esc(noteFn(i))+'</span>' : ''}</button>`).join('');
+}
+function group(rows, f) {
+  const m = new Map();
+  rows.forEach(r => { const k = f(r); if (!m.has(k)) m.set(k, {key:k, n:0, mt:0, rows:[]}); const g = m.get(k); g.n++; g.mt += r.un; g.rows.push(r); });
+  const mf = S.metric === 'trips' ? (g => g.n) : (g => g.mt);
+  return [...m.values()].sort((a,b) => mf(b) - mf(a) || b.n - a.n);
+}
+const metricFn = g => S.metric === 'trips' ? g.n : g.mt;
+
+function renderPermits() {
+  const g = group(filt('permit'), r => r.permit);
+  $('permitList').innerHTML = barList(g, metricFn, S.permit, i => PCOL[i.key],
+    i => new Set(i.rows.map(r => r.pass)).size + ' pass numbers, ' + new Set(i.rows.map(r => r.truck)).size + ' trucks');
+}
+function renderTab() {
+  const t = S.tab;
+  $('tabTitle').textContent = t === 'tr' ? 'Transporters' : t === 'truck' ? 'Trucks' : 'Routes';
+  let html = '';
+  if (t === 'tr') {
+    $('tabSub').textContent = 'Agent / broker name. Select one to filter.';
+    html = barList(group(filt('tr'), r => r.broker), metricFn, S.tr, null, i => pl(new Set(i.rows.map(r => r.truck)).size, 'truck') + ', ' + pl(new Set(i.rows.map(r => r.permit)).size, 'permit'));
+  } else if (t === 'truck') {
+    $('tabSub').textContent = 'Select a truck to search its trips.';
+    html = barList(group(filt(), r => r.truck), metricFn, S.q.trim().toUpperCase(), null, i => i.rows[0].broker);
+  } else {
+    $('tabSub').textContent = 'Loading point to unloading point.';
+    html = barList(group(filt('route'), r => r.route), metricFn, S.route, null, i => i.rows[0].cons ? 'Consignee ' + i.rows[0].cons : '');
+  }
+  $('tabList').innerHTML = html;
+}
+function renderStatus(rows) {
+  const g = group(rows, r => r.st || 'Unknown'), n = rows.length || 1;
+  const col = {'Already Paid':'var(--paid)', 'Received':'var(--c3)', 'Unloaded':'var(--unl)'};
+  $('status').innerHTML = rows.length ? `<div class="stack" role="img" aria-label="Payment status split">${g.map(x => `<i style="width:${x.n/n*100}%;background:${col[x.key]||'var(--muted)'}" title="${esc(x.key)}: ${x.n}"></i>`).join('')}</div>
+    <div class="legend">${g.map(x => `<span><em style="background:${col[x.key]||'var(--muted)'}"></em>${esc(x.key)} <b>${x.n}</b> (${nf(x.mt,1)} MT)</span>`).join('')}</div>` : '<div class="empty-note">No trips in view.</div>';
+  const b = [0,0,0,0]; rows.forEach(r => { if (r.transit != null) b[Math.min(3, Math.max(0, r.transit))]++; });
+  const mx = Math.max(1, ...b);
+  $('hist').innerHTML = b.map((v,i) => `<div><b>${v}</b><i style="height:${v/mx*66}px"></i><span>${i === 3 ? '3+' : i} ${i===1?'day':'days'}</span></div>`).join('');
+}
+
+/* ---------- advances and deductions ---------- */
+const MONEY = [
+  {k:'hsda', l:'HSD Amount', c:'var(--c3)'},
+  {k:'ca',   l:'Cash Adv',   c:'var(--c2)'},
+  {k:'ba',   l:'Bank Adv',   c:'var(--c4)'},
+  {k:'od',   l:'Other Ded.', c:'var(--c5)'},
+  {k:'tds',  l:'TDS Amt.',   c:'var(--c1)'},
+];
+function renderMoney(rows) {
+  const tot = MONEY.map(m => sum(rows, r => r[m.k])), all = tot.reduce((a,b) => a + b, 0);
+  $('moneyTiles').innerHTML = MONEY.map((m,i) => {
+    const cnt = rows.filter(r => r[m.k] > 0).length;
+    return `<div class="mt"><div class="l"><em style="background:${m.c}"></em>${m.l}</div><div class="v">${inr(tot[i])}</div><div class="s">${cnt} of ${rows.length} trips${rows.length ? ', avg ' + inr(cnt ? tot[i]/cnt : 0) : ''}</div></div>`;
+  }).join('');
+  $('moneyStack').innerHTML = all ? MONEY.map((m,i) => `<i style="width:${tot[i]/all*100}%;background:${m.c}" title="${m.l}: ${inr(tot[i])}"></i>`).join('') : '';
+  $('moneyLegend').innerHTML = all ? MONEY.map((m,i) => `<span><em style="background:${m.c}"></em>${m.l} <b>${(tot[i]/all*100).toFixed(1)}%</b></span>`).join('') : '';
+  const g = group(rows, r => r.broker).sort((a,b) => sum(b.rows, r => r.hsda) - sum(a.rows, r => r.hsda));
+  const head = `<thead><tr><th><span>Transporter</span></th><th class="r"><span>Trips</span></th>${MONEY.map(m => `<th class="r"><span>${m.l}</span></th>`).join('')}</tr></thead>`;
+  const body = g.length ? g.map(x => `<tr class="mr${S.tr === x.key ? ' on' : ''}" data-k="${esc(x.key)}"><td>${esc(x.key)}</td><td class="r num">${x.n}</td>${MONEY.map(m => `<td class="r num">${dash(sum(x.rows, r => r[m.k]))}</td>`).join('')}</tr>`).join('') : `<tr><td colspan="7"><div class="empty">No trips in view.</div></td></tr>`;
+  const foot = g.length ? `<tfoot><tr><td>Total</td><td class="r num">${rows.length}</td>${tot.map(v => `<td class="r num">${nf(v)}</td>`).join('')}</tr></tfoot>` : '';
+  $('moneyTbl').innerHTML = head + '<tbody>' + body + '</tbody>' + foot;
+}
+
+/* ---------- table ---------- */
+const COLS = [
+  {k:'pass', l:'Pass no.', num:true, get:r => +r.pass},
+  {k:'permit', l:'Permit no.', get:r => r.permit},
+  {k:'broker', l:'Transporter', get:r => r.broker},
+  {k:'cd', l:'Challan date', get:r => r.cd},
+  {k:'truck', l:'Truck number', get:r => r.truck},
+  {k:'ud', l:'Unloading date', get:r => r.ud || ''},
+  {k:'transit', l:'Days', num:true, get:r => r.transit == null ? -1 : r.transit},
+  {k:'un', l:'UL Net (MT)', num:true, get:r => r.un},
+  {k:'hsda', l:'HSD Amount', num:true, get:r => r.hsda},
+  {k:'ca', l:'Cash Adv', num:true, get:r => r.ca},
+  {k:'ba', l:'Bank Adv', num:true, get:r => r.ba},
+  {k:'od', l:'Other Ded.', num:true, get:r => r.od},
+  {k:'tds', l:'TDS Amt.', num:true, get:r => r.tds},
+  {k:'st', l:'Payment', get:r => r.st || ''},
+];
+function sortRows(rows) {
+  const c = COLS.find(x => x.k === S.sort.k) || COLS[3], d = S.sort.dir;
+  return rows.slice().sort((a,b) => { const x = c.get(a), y = c.get(b); return (x < y ? -1 : x > y ? 1 : (a.id - b.id)) * d; });
+}
+function rowHtml(r) {
+  return `<tr class="trip" tabindex="0" data-id="${r.id}">
+    <td><span class="passno">${esc(r.pass)}</span></td>
+    <td><span class="pill" style="--pc:${PCOL[r.permit]}">${esc(r.permit)}</span></td>
+    <td>${esc(r.broker)}</td>
+    <td>${dShort(r.cd)}</td>
+    <td class="mono">${esc(r.truck)}</td>
+    <td>${dShort(r.ud)}</td>
+    <td class="r num">${r.transit == null ? '-' : r.transit}</td>
+    <td class="r num">${nf(r.un)}</td>
+    <td class="r num">${dash(r.hsda)}</td>
+    <td class="r num">${dash(r.ca)}</td>
+    <td class="r num">${dash(r.ba)}</td>
+    <td class="r num">${dash(r.od)}</td>
+    <td class="r num">${dash(r.tds)}</td>
+    <td><span class="pill st ${stClass(r.st)}">${esc(r.st || '-')}</span></td></tr>`;
+}
+function renderTable(rows) {
+  const sorted = sortRows(rows);
+  $('tblSub').textContent = rows.length + (rows.length === 1 ? ' trip' : ' trips') + ' in view. Select a row for the full challan.';
+  const head = '<thead><tr>' + COLS.map(c => {
+    const on = S.sort.k === c.k;
+    return `<th class="${c.num ? 'r' : ''}" aria-sort="${on ? (S.sort.dir === 1 ? 'ascending' : 'descending') : 'none'}"><button type="button" data-k="${c.k}">${esc(c.l)}<span class="ar">${on ? (S.sort.dir === 1 ? '&#9650;' : '&#9660;') : ''}</span></button></th>`;
+  }).join('') + '</tr></thead>';
+  if (!rows.length) {
+    $('tbl').innerHTML = head + `<tbody><tr><td colspan="${COLS.length}"><div class="empty">No trips match. Clear the search or reset the filters.<br><button class="btn primary" type="button" data-reset>Reset filters</button></div></td></tr></tbody>`;
+    return;
+  }
+  let body = '';
+  if (S.view === 'flat') body = sorted.map(rowHtml).join('');
+  else {
+    const g = group(rows, r => r.permit).sort((a,b) => b.n - a.n);
+    g.forEach(x => {
+      const closed = S.closed.has(x.key);
+      const ps = x.rows.map(r => +r.pass);
+      body += `<tr class="grp${closed ? ' closed' : ''}" data-p="${esc(x.key)}" tabindex="0" aria-expanded="${!closed}"><td colspan="${COLS.length}"><div class="g-in"><span class="car">&#9662;</span><span class="pill" style="--pc:${PCOL[x.key]}">${esc(x.key)}</span><span>${x.n} trips</span><span>${nf(x.mt,1)} MT</span><span class="gs">passes ${Math.min(...ps)} to ${Math.max(...ps)}, ${new Set(x.rows.map(r=>r.truck)).size} trucks</span></div></td></tr>`;
+      if (!closed) body += sortRows(x.rows).map(rowHtml).join('');
+    });
+  }
+  const foot = `<tfoot><tr><td colspan="7">Total, ${rows.length} trips</td><td class="r num">${nf(sum(rows, r => r.un))}</td>${['hsda','ca','ba','od','tds'].map(k => `<td class="r num">${nf(sum(rows, r => r[k]))}</td>`).join('')}<td></td></tr></tfoot>`;
+  $('tbl').innerHTML = head + '<tbody>' + body + '</tbody>' + foot;
+}
+
+/* ---------- drawer ---------- */
+let lastFocus = null;
+function openTrip(id) {
+  const r = ROWS.find(x => x.id === +id); if (!r) return;
+  lastFocus = document.activeElement;
+  $('dTitle').textContent = r.tp;
+  $('dSub').textContent = r.truck + ' | ' + r.broker;
+  const sec = (t, pairs) => `<h4>${t}</h4><dl>${pairs.filter(p => p[1] !== null && p[1] !== undefined && p[1] !== '').map(p => `<dt>${p[0]}</dt><dd>${esc(p[1])}</dd>`).join('')}</dl>`;
+  $('dBody').innerHTML =
+    sec('Trip', [['Permit number', r.permit], ['Pass number', r.pass], ['Challan date', dFull(r.cd)], ['Unloading date', dFull(r.ud)], ['Days in transit', r.transit], ['Truck number', r.truck], ['WS / invoice no.', r.ws], ['Vehicle type', r.vt]]) +
+    sec('Parties and route', [['Transporter (agent/broker)', r.broker], ['Vehicle owner', r.owner], ['Challan hold name', r.holder], ['Billing party', r.party], ['Consignor / consignee', 'NTPC / ' + (r.cons||'-')], ['Loading point', r.lp], ['Unloading point', r.up], ['Collection centre', r.cc]]) +
+    sec('Weights (MT)', [['Loading gross / tare / net', nf(r.lg) + ' / ' + nf(r.lt) + ' / ' + nf(r.ln)], ['Unloading gross / tare / net', nf(r.ug) + ' / ' + nf(r.ut) + ' / ' + nf(r.un)], ['UL Net', nf(r.un)], ['Shortage qty', nf(r.sh)]]) +
+    sec('Freight and payment (INR)', [['Rate per MT', nf(r.rate,0)], ['Freight amount', nf(r.fr)], ['HSD amount', nf(r.hsda)], ['Cash advance', nf(r.ca)], ['Bank advance', nf(r.ba)], ['HSD litres / pump', nf(r.hsdl,0) + (r.pump ? ' / ' + r.pump : '')], ['Other deduction', r.od != null ? nf(r.od) + (r.dtw ? ' (' + r.dtw + ')' : '') : ''], ['TDS', nf(r.tds)], ['Total deduction', nf(r.td)], ['Net amount', nf(r.net)], ['Status', r.st], ['Received date', r.rcv ? dFull(r.rcv) : ''], ['Payment date', r.pay ? dFull(r.pay) : ''], ['Bank', r.bank], ['Ref no.', r.ref]]);
+  $('drawer').hidden = false; $('scrim').hidden = false; $('dClose').focus();
+}
+function closeTrip() { $('drawer').hidden = true; $('scrim').hidden = true; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+
+/* ---------- master render ---------- */
+function syncControls() {
+  $('fTr').value = S.tr; $('fPermit').value = S.permit; $('fRoute').value = S.route;
+  $('fFrom').value = S.from; $('fTo').value = S.to;
+  if ($('q').value !== S.q) $('q').value = S.q;
+  $('reset').hidden = !isFiltered();
+  [['segMetric','m','metric'],['segBasis','b','basis'],['segTab','t','tab'],['segView','v','view']].forEach(([id, a, k]) =>
+    $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset[a] === S[k])));
+}
+function render() {
+  const rows = filt();
+  $('hits').textContent = S.q ? rows.length + ' found' : '';
+  syncControls();
+  renderInsight(rows); renderKpis(rows); renderTrend(rows); renderPermits(); renderTab(); renderStatus(rows); renderMoney(rows); renderTable(rows);
+}
+function resetAll() { Object.assign(S, {q:'', tr:'', permit:'', route:'', from:'', to:''}); render(); }
+const toggle = (k, v) => { S[k] = S[k] === v ? '' : v; render(); };
+
+/* ---------- data loading: CSV parse, merge, live file, upload ---------- */
+function parseCSV(text) {
+  text = text.replace(/^\uFEFF/, '');
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i+1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+    else if (c === '"') q = true;
+    else if (c === ',') { row.push(f); f = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i+1] === '\n') i++; row.push(f); f = ''; rows.push(row); row = []; }
+    else f += c;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows;
+}
+function parseDate(s) {
+  s = (s || '').trim(); let m;
+  if ((m = s.match(/^(\d{1,2})[-\/ ]([A-Za-z]{3})[A-Za-z]*[-\/ ](\d{2,4})$/))) {
+    const mi = MON.findIndex(x => x.toLowerCase() === m[2].toLowerCase()); if (mi < 0) return null;
+    const y = m[3].length === 2 ? 2000 + +m[3] : +m[3];
+    return y + '-' + String(mi + 1).padStart(2, '0') + '-' + String(+m[1]).padStart(2, '0');
+  }
+  if ((m = s.match(/^(\d{4})-(\d{2})-(\d{2})/))) return m[1] + '-' + m[2] + '-' + m[3];
+  if ((m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/))) return m[3] + '-' + String(+m[2]).padStart(2, '0') + '-' + String(+m[1]).padStart(2, '0');
+  return null;
+}
+const REQUIRED = ['SlNo', 'Challan Date', 'Truck Number', 'Unloading Date', 'UL Net', 'Agent/Broker Name', 'Permit Number', 'Pass Number'];
+function csvToRows(text, name) {
+  const grid = parseCSV(text);
+  const hi = grid.findIndex(r => (r[0] || '').trim() === 'SlNo');
+  if (hi < 0) throw new Error(name + ': could not find the header row that starts with "SlNo". Is this the Challan Unload export?');
+  const head = [], seen = {};
+  grid[hi].forEach(h => { h = (h || '').trim(); seen[h] = (seen[h] || 0) + 1; head.push(seen[h] > 1 ? h + '_' + seen[h] : h); });
+  const missing = REQUIRED.filter(h => !head.includes(h));
+  if (missing.length) throw new Error(name + ': missing column' + (missing.length > 1 ? 's' : '') + ' ' + missing.join(', ') + '.');
+  const idx = {}; head.forEach((h, i) => idx[h] = i);
+  const g = (r, h) => idx[h] === undefined ? '' : (r[idx[h]] || '').trim();
+  const num = v => { const n = parseFloat(String(v).replace(/,/g, '')); return isNaN(n) ? 0 : Math.round(n * 1000) / 1000; };
+  const txt = v => v === '' ? null : v;
+  const titleText = grid.slice(0, hi).map(r => r.join(' ')).join(' ');
+  const pm = titleText.match(/For the Period\s+([0-9A-Za-z-]+\s+to\s+[0-9A-Za-z-]+)/i);
+  const rows = []; let skipped = 0;
+  grid.slice(hi + 1).forEach(r => {
+    const sl = g(r, 'SlNo');
+    if (sl === '') return;
+    if (!/^\d+$/.test(sl)) { skipped++; return; }
+    const cd = parseDate(g(r, 'Challan Date'));
+    if (!cd) { skipped++; return; }
+    rows.push({
+      id: +g(r, 'SlNo'), ws: txt(g(r, 'WS/Inv. Number')), cd, ud: parseDate(g(r, 'Unloading Date')),
+      tp: txt(g(r, 'TP Number')), truck: txt(g(r, 'Truck Number')), permit: txt(g(r, 'Permit Number')), pass_: txt(g(r, 'Pass Number')),
+      broker: txt(g(r, 'Agent/Broker Name')), owner: txt(g(r, 'Vehicle Owner Name')), holder: txt(g(r, 'Challan Hold Name')),
+      lg: num(g(r, 'L Gross')), lt: num(g(r, 'L Tare')), ln: num(g(r, 'L Net')),
+      ug: num(g(r, 'UL Gross')), ut: num(g(r, 'UL Tare')), un: num(g(r, 'UL Net')), sh: num(g(r, 'Shrt Qty')),
+      rate: num(g(r, 'Rate @')), fr: num(g(r, 'Freight Amt')), ca: num(g(r, 'Cash Adv')), ba: num(g(r, 'Bank Adv')),
+      hsdl: num(g(r, 'HSD Ltr')), hsda: num(g(r, 'HSD Amount')), pump: txt(g(r, 'Petrol Pump')),
+      od: num(g(r, 'Other Ded.')), dtw: txt(g(r, 'Deduction Towards')), tds: num(g(r, 'TDS Amt.')), td: num(g(r, 'Tot. Deduction')), net: num(g(r, 'Net Amount')),
+      cons: txt(g(r, 'Consignee')), party: txt(g(r, 'Billing Party')), lp: txt(g(r, 'Loading Point')), up: txt(g(r, 'Unloading Point')),
+      ref: txt(g(r, 'Ref No.')), rcv: parseDate(g(r, 'Received Date')), pay: parseDate(g(r, 'Payment Date')), bank: txt(g(r, 'Bank Name')),
+      cc: txt(g(r, 'Collection Center')), vt: txt(g(r, 'Vehicle Type')), st: txt(g(r, 'Bill Date'))
+    });
+  });
+  if (!rows.length) throw new Error(name + ': no trip rows found under the header.');
+  return { name, rows, skipped, period: pm ? pm[1] : '' };
+}
+function mergeParts(parts) {
+  const m = new Map(); let n = 0;
+  parts.forEach(p => p.rows.forEach(r => { n++; m.set(r.tp || (r.permit + '/' + r.pass_ + '/' + r.cd), r); }));
+  return { rows: [...m.values()], duplicates: n - m.size, skipped: parts.reduce((s, p) => s + p.skipped, 0) };
+}
+
+function setNotice(kind, msg, opt) {
+  const n = $('notice');
+  $('pubBtn').hidden = !(opt && opt.pub); $('pubBtn').disabled = !!(opt && opt.busy);
+  if (!msg) { n.hidden = true; return; }
+  n.className = 'notice ' + kind; $('noticeText').textContent = msg; n.hidden = false;
+}
+const fmtWhen = iso => new Date(iso).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+function setData(list, meta) {
+  ROWS = list.map((r, i) => decorate(Object.assign({}, r, { id: i + 1 })));
+  TOTAL = ROWS.length;
+  const pc = {}; ROWS.forEach(r => pc[r.permit] = (pc[r.permit] || 0) + 1);
+  PERMITS = Object.keys(pc).sort((a, b) => pc[b] - pc[a] || a.localeCompare(b));
+  PCOL = {}; PERMITS.forEach((p, i) => PCOL[p] = 'var(--c' + ((i % 5) + 1) + ')');
+  ROUTES = [...new Set(ROWS.map(r => r.route))].sort();
+  TRANSPORTERS = [...new Set(ROWS.map(r => r.broker))].sort();
+  const opt = (v, l) => `<option value="${esc(v)}">${esc(l)}</option>`;
+  $('fTr').innerHTML = opt('', 'All transporters') + TRANSPORTERS.map(x => opt(x, x)).join('');
+  $('fPermit').innerHTML = opt('', 'All permits') + PERMITS.map(x => opt(x, x)).join('');
+  $('fRoute').innerHTML = opt('', 'All routes') + ROUTES.map(x => opt(x, x)).join('');
+  const cds = ROWS.map(r => r.cd).sort();
+  $('fFrom').min = $('fTo').min = cds[0]; $('fFrom').max = $('fTo').max = cds[cds.length - 1];
+  Object.assign(S, { tr:'', permit:'', route:'', from:'', to:'' }); S.closed = new Set();
+  const range = meta.period ? 'Report period ' + meta.period : 'Challan dates ' + dFull(cds[0]) + ' to ' + dFull(cds[cds.length - 1]);
+  $('period').textContent = range + '. Data source: ' + meta.source + '.';
+  render();
+}
+
+function loadEmbedded(note) {
+  const m = EMBED.meta || {};
+  const src = m.uploadedAt ? (m.source || 'uploaded file') + ', published ' + fmtWhen(m.uploadedAt) : (m.source || 'built-in snapshot');
+  PENDING = null;
+  setData(EMBED.rows, { period: m.period || '', source: src });
+  $('liveBtn').hidden = true;
+  setNotice(note ? 'warn' : '', note || '');
+}
+async function loadLive() {
+  setNotice('', '');
+  let files = ['DASHBOARD.csv'], lastMod = null;
+  try {
+    try { const r = await fetch(DATA_DIR + 'files.json', { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (Array.isArray(j) && j.length) files = j; } } catch (e) {}
+    const parts = [];
+    for (const f of files) {
+      const res = await fetch(DATA_DIR + encodeURIComponent(f), { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status + ' for ' + f);
+      lastMod = res.headers.get('Last-Modified') || lastMod;
+      parts.push(csvToRows(await res.text(), f));
+    }
+    const m = mergeParts(parts);
+    const upd = lastMod ? ', file updated ' + new Date(lastMod).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '';
+    setData(m.rows, { period: parts.length === 1 ? parts[0].period : '', source: files.map(f => DATA_DIR + f).join(' + ') + upd });
+    $('liveBtn').hidden = true;
+  } catch (err) {
+    loadEmbedded('Live data file was not found or could not be read (' + err.message + '), so the built-in snapshot of ' + EMBED.rows.length + ' trips is shown. Use Upload CSV to load a newer export.');
+  }
+}
+async function handleFiles(fileList) {
+  const files = [...fileList].filter(f => /\.csv$/i.test(f.name) || f.type === 'text/csv');
+  if (!files.length) { setNotice('err', 'Please choose a .csv file.'); return; }
+  try {
+    const parts = [];
+    for (const f of files) parts.push(csvToRows(await f.text(), f.name));
+    const m = mergeParts(parts);
+    setData(m.rows, { period: parts.length === 1 ? parts[0].period : '', source: 'uploaded ' + files.map(f => f.name).join(' + ') });
+    $('liveBtn').hidden = false;
+    const base = 'Loaded ' + m.rows.length + ' trips from ' + files.map(f => f.name).join(' + ') +
+      (m.duplicates ? ', ' + m.duplicates + ' repeated TP numbers merged' : '') +
+      (m.skipped ? ', ' + m.skipped + (m.skipped === 1 ? ' row' : ' rows') + ' skipped (bad date or number)' : '') + '. ';
+    if (MODE === 'artifact') {
+      PENDING = { rows: m.rows, period: parts.length === 1 ? parts[0].period : '', source: 'uploaded ' + files.map(f => f.name).join(' + ') };
+      setNotice('ok', base + 'Only you can see this preview. Check the numbers, then publish it so everyone sees this data until your next upload.', { pub: true });
+    } else {
+      setNotice('ok', base + 'This upload is a preview in your browser only. To update the public dashboard, replace data/DASHBOARD.csv in the GitHub repository.');
+    }
+  } catch (err) {
+    setNotice('err', err.message + ' The dashboard still shows the previous data.');
+  }
+}
+
+/* ---------- publish (artifact mode): rebuild this page with the new data and publish it ---------- */
+function buildPage(p) {
+  const meta = { period: p.period || '', source: p.source, uploadedAt: new Date().toISOString() };
+  const json = JSON.stringify({ rows: p.rows, meta }).replace(/</g, '\\u003c');
+  return '<!doctype html>\n<html lang="en"><head>' + HEAD_HTML +
+    '<style id="appCss">' + document.getElementById('appCss').textContent + '</style></head><body>' +
+    '<template id="skeleton">' + document.getElementById('skeleton').innerHTML + '</template>' +
+    '<script type="application/json" id="appData">' + json + '</' + 'script>' +
+    '<script id="app">' + document.getElementById('app').textContent + '</' + 'script></body></html>';
+}
+async function publishNow() {
+  if (!PENDING) return;
+  let art = null;
+  try { art = window.claude && window.claude.use ? await window.claude.use('artifact') : null; } catch (e) {}
+  if (!art) { setNotice('err', 'Publishing only works on the claude.ai page of this dashboard, opened by its owner. Your preview is still shown.', { pub: true }); return; }
+  setNotice('warn', 'Publishing. The page will reload with the new data in a moment.', { pub: true, busy: true });
+  try {
+    await art.publish(buildPage(PENDING));
+  } catch (e) {
+    const c = e && e.code;
+    const msg = (c === 'not_writer' || c === 'not_granted' || c === 'consent_required' || c === 'not_declared')
+      ? 'Only the dashboard owner can publish new data. Your preview is still shown.'
+      : c === 'conflict' ? 'The dashboard was updated by someone else just now. It will reload to the latest version.'
+      : c === 'too_large' ? 'The data is too large to publish. Try a file with fewer rows.'
+      : c === 'rate_limited' ? 'Too many publishes in a short time. Wait a minute and try again.'
+      : 'Publishing failed (' + (c || 'unknown error') + '). Your preview is still shown; try again.';
+    setNotice('err', msg, { pub: c !== 'not_writer' && c !== 'not_granted' && c !== 'conflict' });
+  }
+}
+
+/* ---------- events ---------- */
+function init() {
+  $('q').addEventListener('input', e => { S.q = e.target.value; render(); });
+  $('fTr').onchange = e => { S.tr = e.target.value; render(); };
+  $('fPermit').onchange = e => { S.permit = e.target.value; render(); };
+  $('fRoute').onchange = e => { S.route = e.target.value; render(); };
+  $('fFrom').onchange = e => { S.from = e.target.value; render(); };
+  $('fTo').onchange = e => { S.to = e.target.value; render(); };
+  $('reset').onclick = resetAll;
+  $('segMetric').onclick = e => { const b = e.target.closest('button'); if (b) { S.metric = b.dataset.m; render(); } };
+  $('segBasis').onclick = e => { const b = e.target.closest('button'); if (b) { S.basis = b.dataset.b; render(); } };
+  $('segTab').onclick = e => { const b = e.target.closest('button'); if (b) { S.tab = b.dataset.t; render(); } };
+  $('segView').onclick = e => { const b = e.target.closest('button'); if (b) { S.view = b.dataset.v; render(); } };
+  $('trend').onclick = e => { const h = e.target.closest('.hit.click'); if (!h) return; const d = h.dataset.d; if (S.from === d && S.to === d) { S.from = S.to = ''; } else { S.from = S.to = d; } render(); };
+  $('permitList').onclick = e => { const b = e.target.closest('.brow'); if (b) toggle('permit', b.dataset.k); };
+  $('tabList').onclick = e => {
+    const b = e.target.closest('.brow'); if (!b) return;
+    if (S.tab === 'tr') toggle('tr', b.dataset.k);
+    else if (S.tab === 'route') toggle('route', b.dataset.k);
+    else { S.q = S.q.trim().toUpperCase() === b.dataset.k ? '' : b.dataset.k; render(); }
+  };
+  $('moneyTbl').onclick = e => { const r = e.target.closest('tr.mr'); if (r) toggle('tr', r.dataset.k); };
+  $('tbl').onclick = e => {
+    if (e.target.closest('[data-reset]')) return resetAll();
+    const th = e.target.closest('th button');
+    if (th) { const k = th.dataset.k; S.sort = S.sort.k === k ? {k, dir:-S.sort.dir} : {k, dir:(COLS.find(c => c.k === k).num || k==='cd' || k==='ud') ? -1 : 1}; return renderTable(filt()); }
+    const g = e.target.closest('tr.grp');
+    if (g) { const p = g.dataset.p; S.closed.has(p) ? S.closed.delete(p) : S.closed.add(p); return renderTable(filt()); }
+    const t = e.target.closest('tr.trip'); if (t) openTrip(t.dataset.id);
+  };
+  $('tbl').onkeydown = e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const t = e.target.closest('tr.trip, tr.grp'); if (!t || e.target.closest('th')) return;
+    e.preventDefault(); t.click();
+  };
+  $('dClose').onclick = closeTrip; $('scrim').onclick = closeTrip;
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !$('drawer').hidden) closeTrip();
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'SELECT') { e.preventDefault(); $('q').focus(); }
+  });
+
+  const root = document.documentElement, tb = $('themeBtn');
+  const dark = () => root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  const label = () => { tb.textContent = dark() ? 'Light mode' : 'Dark mode'; };
+  tb.onclick = () => { root.dataset.theme = dark() ? 'light' : 'dark'; label(); };
+  label();
+
+  $('uploadBtn').onclick = () => $('file').click();
+  $('file').onchange = e => { const fl = [...e.target.files]; e.target.value = ''; if (fl.length) handleFiles(fl); };
+  $('liveBtn').onclick = () => (MODE === 'artifact' ? loadEmbedded() : loadLive());
+  $('pubBtn').onclick = publishNow;
+  $('noticeX').onclick = () => setNotice('', '');
+  let dragDepth = 0;
+  window.addEventListener('dragenter', e => { if (e.dataTransfer && [...e.dataTransfer.types].includes('Files')) { dragDepth++; $('drop').hidden = false; } });
+  window.addEventListener('dragleave', () => { dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) $('drop').hidden = true; });
+  window.addEventListener('dragover', e => e.preventDefault());
+  window.addEventListener('drop', e => { e.preventDefault(); dragDepth = 0; $('drop').hidden = true; if (!window.__readOnly && e.dataTransfer && e.dataTransfer.files.length) handleFiles(e.dataTransfer.files); });
+
+  if (MODE === 'artifact') {
+    $('liveBtn').textContent = 'Discard upload';
+    loadEmbedded();
+    (async () => {  // hide upload for viewers who are explicitly read-only
+      try {
+        const u = window.claude && window.claude.use ? await window.claude.use('user') : null;
+        if (u && typeof u.canEdit === 'function' && u.canEdit() === false) {
+          $('uploadBtn').hidden = true; $('liveBtn').hidden = true;
+          window.__readOnly = true;
+        }
+      } catch (e) {}
+    })();
+  } else loadLive();
+}
+init();</script></body></html>
